@@ -202,7 +202,7 @@ class LoginTest extends OmegaupTestCase {
 
         // Expire token manually
         $auth_token_dao = AuthTokensDAO::getByPK($auth_token);
-        $auth_token_dao->create_time = date('Y-m-d H:i:s', strtotime($auth_token_dao->create_time . ' - 9 hour'));
+        $auth_token_dao->create_time = strtotime(date('Y-m-d H:i:s', $auth_token_dao->create_time) . ' - 9 hour');
         AuthTokensDAO::save($auth_token_dao);
 
         $auth_token_2 = self::login($user);

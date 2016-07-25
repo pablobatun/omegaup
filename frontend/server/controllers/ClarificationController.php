@@ -74,7 +74,7 @@ class ClarificationController extends Controller {
             'contest_id' => $r['contest']->contest_id,
             'problem_id' => $r['problem']->problem_id,
             'message' => $r['message'],
-            'time' => gmdate('Y-m-d H:i:s', $time),
+            'time' => $time,
             'public' => '0'
         ));
 
@@ -200,7 +200,7 @@ class ClarificationController extends Controller {
 
         // Let DB handle time update
         $time = time();
-        $clarification->time = gmdate('Y-m-d H:i:s', $time);
+        $clarification->time = $time;
 
         // Save the clarification
         try {

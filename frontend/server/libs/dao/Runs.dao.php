@@ -329,7 +329,7 @@ class RunsDAO extends RunsDAOBase {
         }
 
         $run = new Runs($rs);
-        return array($run, time() - strtotime($run->time));
+        return array($run, time() - $run->time);
     }
 
     /*
@@ -523,7 +523,7 @@ class RunsDAO extends RunsDAOBase {
         }
         $submission_gap = max($submission_gap, RunController::$defaultSubmissionGap);
 
-        return time() >= (strtotime($lastrun->time) + $submission_gap);
+        return time() >= ($lastrun->time + $submission_gap);
     }
 
     public static function GetRunCountsToDate($date) {

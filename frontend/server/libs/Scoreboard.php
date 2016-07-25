@@ -96,7 +96,7 @@ class Scoreboard {
                 $this->auth_token
             );
 
-            $timeout = max(0, strtotime($contest->finish_time) - time());
+            $timeout = max(0, $contest->finish_time - time());
             if ($can_use_contestant_cache) {
                 $contestantScoreboardCache->set($result, $timeout);
             } elseif ($can_use_admin_cache) {
@@ -160,7 +160,7 @@ class Scoreboard {
                 $this->showAllRuns
             );
 
-            $timeout = max(0, strtotime($contest->finish_time) - time());
+            $timeout = max(0, $contest->finish_time - time());
             if ($can_use_contestant_cache) {
                 $contestantEventsCache->set($result, $timeout);
             } elseif ($can_use_admin_cache) {
@@ -223,7 +223,7 @@ class Scoreboard {
         $scoreboardLimit = Scoreboard::getScoreboardTimeLimitUnixTimestamp($contest);
 
         // Cache scoreboard until the contest ends (or forever if it has already ended).
-        $timeout = max(0, strtotime($contest->finish_time) - time());
+        $timeout = max(0, $contest->finish_time - time());
         $contestantScoreboardCache = new Cache(Cache::CONTESTANT_SCOREBOARD_PREFIX, $contest_id);
 
         $contestantScoreboard = Scoreboard::getScoreboardFromRuns(
@@ -311,8 +311,8 @@ class Scoreboard {
             return null;
         }
 
-        $start = strtotime($contest->start_time);
-        $finish = strtotime($contest->finish_time);
+        $start = $contest->start_time;
+        $finish = $contest->finish_time;
 
         $percentage = (double)$contest->scoreboard / 100.0;
 
@@ -414,7 +414,7 @@ class Scoreboard {
                     continue;
                 }
                 if (!is_null($scoreboard_time_limit) &&
-                    strtotime($run->time) >= $scoreboard_time_limit) {
+                    $run->time >= $scoreboard_time_limit) {
                     $problem['runs']++;
                     $problem['pending'] = true;
                     continue;
@@ -466,8 +466,8 @@ class Scoreboard {
         return array(
             'problems' => $problems,
             'ranking' => $result,
-            'start_time' => strtotime($contest->start_time),
-            'finish_time' => strtotime($contest->finish_time),
+            'start_time' => $contest->start_time,
+            'finish_time' => $contest->finish_time,
             'title' => $contest->title,
             'time' => time() * 1000
         );
@@ -546,7 +546,7 @@ class Scoreboard {
 
         $user_problems_score = array();
 
-        $contestStart = strtotime($contest->start_time);
+        $contestStart = $contest->start_time;
         $scoreboardLimit = Scoreboard::getScoreboardTimeLimitUnixTimestamp($contest, $showAllRuns);
 
         // Calculate score for each contestant x problem x run
@@ -556,7 +556,7 @@ class Scoreboard {
             }
 
             $log = Logger::getLogger('Scoreboard');
-            $run_delay = strtotime($run->time);
+            $run_delay = $run->time;
             $log->debug(">>      run_delay : $run_delay");
             $log->debug(">>scoreboardLimit : $scoreboardLimit");
             $log->debug('');

@@ -74,7 +74,7 @@ class Utils {
         if (is_null($time)) {
             return time();
         } else {
-            return strtotime($time);
+            return $time;
         }
     }
 

@@ -1061,8 +1061,8 @@ class UserController extends Controller {
         $response['userinfo']['name'] = $user->name;
         $response['userinfo']['solved'] = $user->solved;
         $response['userinfo']['submissions'] = $user->submissions;
-        $response['userinfo']['birth_date'] = is_null($user->birth_date) ? null : strtotime($user->birth_date);
-        $response['userinfo']['graduation_date'] = is_null($user->graduation_date) ? null : strtotime($user->graduation_date);
+        $response['userinfo']['birth_date'] = is_null($user->birth_date) ? null : $user->birth_date;
+        $response['userinfo']['graduation_date'] = is_null($user->graduation_date) ? null : $user->graduation_date;
         $response['userinfo']['scholar_degree'] = $user->scholar_degree;
         $response['userinfo']['recruitment_optin'] = is_null($user->recruitment_optin) ? null : $user->recruitment_optin;
 
@@ -1329,7 +1329,6 @@ class UserController extends Controller {
                 }
             }
 
-            $contest->toUnixTime();
             $contests[$contest->alias]['data'] = $contest->asArray();
         }
 
@@ -1562,12 +1561,8 @@ class UserController extends Controller {
             'state_id',
             'scholar_degree',
             'school_id',
-            'graduation_date' => array('transform' => function ($value) {
-                return gmdate('Y-m-d', $value);
-            }),
-            'birth_date' => array('transform' => function ($value) {
-                return gmdate('Y-m-d', $value);
-            }),
+            'graduation_date',
+            'birth_date',
             'recruitment_optin',
         );
 

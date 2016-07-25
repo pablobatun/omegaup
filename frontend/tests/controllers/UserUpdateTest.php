@@ -38,8 +38,8 @@ class UserUpdateTest extends OmegaupTestCase {
         $this->assertEquals($user_db->country_id, $r['country_id']);
         $this->assertEquals($user_db->state_id, $r['state_id']);
         $this->assertEquals($user_db->scholar_degree, $r['scholar_degree']);
-        $this->assertEquals($user_db->birth_date, gmdate('Y-m-d', $r['birth_date']));
-        $this->assertEquals($user_db->graduation_date, gmdate('Y-m-d', $r['graduation_date']));
+        $this->assertEquals($user_db->birth_date, $r['birth_date']);
+        $this->assertEquals($user_db->graduation_date, $r['graduation_date']);
         $this->assertEquals($user_db->recruitment_optin, $r['recruitment_optin']);
     }
 

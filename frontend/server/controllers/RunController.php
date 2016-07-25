@@ -238,7 +238,7 @@ class RunController extends Controller {
             if (!is_null($start)) {
                 //ok, what time is it now?
                 $c_time = time();
-                $start = strtotime($start);
+                $start = $start;
 
                 //asuming submit_delay is in minutes
                 $submit_delay = (int) (( $c_time - $start ) / 60);
@@ -311,9 +311,9 @@ class RunController extends Controller {
                 $contest_user = ContestsUsersDAO::getByPK($r['current_user_id'], $r['contest']->contest_id);
 
                 if ($r['contest']->window_length === null) {
-                    $response['submission_deadline'] = strtotime($r['contest']->finish_time);
+                    $response['submission_deadline'] = $r['contest']->finish_time;
                 } else {
-                    $response['submission_deadline'] = min(strtotime($r['contest']->finish_time), strtotime($contest_user->access_time) + $r['contest']->window_length * 60);
+                    $response['submission_deadline'] = min($r['contest']->finish_time, $contest_user->access_time + $r['contest']->window_length * 60);
                 }
             } catch (Exception $e) {
                 // Operation failed in the data layer
@@ -413,7 +413,7 @@ class RunController extends Controller {
             'runtime', 'penalty', 'memory', 'score', 'contest_score', 'time',
             'submit_delay');
         $filtered = $r['run']->asFilteredArray($relevant_columns);
-        $filtered['time'] = strtotime($filtered['time']);
+        $filtered['time'] = $filtered['time'];
         $filtered['score'] = round((float) $filtered['score'], 4);
         $filtered['runtime'] = (int)$filtered['runtime'];
         $filtered['penalty'] = (int)$filtered['penalty'];

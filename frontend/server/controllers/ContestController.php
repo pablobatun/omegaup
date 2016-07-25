@@ -121,7 +121,6 @@ class ContestController extends Controller {
 
         $addedContests = array();
         foreach ($contests as $c) {
-            $c->toUnixTime();
             $contestInfo = $c->asFilteredArray($relevant_columns);
             $addedContests[] = $contestInfo;
         }
@@ -289,7 +288,7 @@ class ContestController extends Controller {
             $r['contest_admin'] = Authorization::IsContestAdmin($r['current_user_id'], $r['contest']);
             if (!ContestsDAO::hasStarted($r['contest']) && !$r['contest_admin']) {
                 $exception = new PreconditionFailedException('contestNotStarted');
-                $exception->addCustomMessageToArray('start_time', strtotime($r['contest']->start_time));
+                $exception->addCustomMessageToArray('start_time', $r['contest']->start_time);
 
                 throw $exception;
             }
@@ -341,8 +340,8 @@ class ContestController extends Controller {
             }
         }
 
-        $result['start_time'] = strtotime($result['start_time']);
-        $result['finish_time'] = strtotime($result['finish_time']);
+        $result['start_time'] = $result['start_time'];
+        $result['finish_time'] = $result['finish_time'];
 
         $result['status'] = 'ok';
 
@@ -358,7 +357,7 @@ class ContestController extends Controller {
         $contest_req = new ContestUserRequest();
         $contest_req->user_id = $r['current_user_id'];
         $contest_req->contest_id = $r['contest']->contest_id;
-        $contest_req->request_time = gmdate('Y-m-d H:i:s');
+        $contest_req->request_time = time();
 
         try {
             ContestUserRequestDAO::save($contest_req);
@@ -420,8 +419,8 @@ class ContestController extends Controller {
             // Initialize response to be the contest information
             $result = $r['contest']->asFilteredArray($relevant_columns);
 
-            $result['start_time'] = strtotime($result['start_time']);
-            $result['finish_time'] = strtotime($result['finish_time']);
+            $result['start_time'] = $result['start_time'];
+            $result['finish_time'] = $result['finish_time'];
 
             try {
                 $result['director'] = UsersDAO::getByPK($r['contest']->director_id)->username;
@@ -518,11 +517,11 @@ class ContestController extends Controller {
 
             // Add time left to response
             if ($r['contest']->window_length === null) {
-                $result['submission_deadline'] = strtotime($r['contest']->finish_time);
+                $result['submission_deadline'] = $r['contest']->finish_time;
             } else {
                 $result['submission_deadline'] = min(
-                    strtotime($r['contest']->finish_time),
-                    strtotime($contest_user->access_time) + $r['contest']->window_length * 60
+                    $r['contest']->finish_time,
+                    $contest_user->access_time + $r['contest']->window_length * 60
                 );
             }
             $result['admin'] = Authorization::IsContestAdmin($r['current_user_id'], $r['contest']);
@@ -685,8 +684,8 @@ class ContestController extends Controller {
         $contest->public = $r['public'];
         $contest->title = $r['title'];
         $contest->description = $r['description'];
-        $contest->start_time = gmdate('Y-m-d H:i:s', $r['start_time']);
-        $contest->finish_time = gmdate('Y-m-d H:i:s', $r['finish_time']);
+        $contest->start_time = $r['start_time'];
+        $contest->finish_time = $r['finish_time'];
         $contest->window_length = $r['window_length'] === 'NULL' ? null : $r['window_length'];
         $contest->director_id = $r['current_user_id'];
         $contest->rerun_id = 0; // NYI
@@ -818,8 +817,8 @@ class ContestController extends Controller {
 
         // Get the actual start and finish time of the contest, considering that
         // in case of update, parameters can be optional
-        $start_time = !is_null($r['start_time']) ? $r['start_time'] : strtotime($r['contest']->start_time);
-        $finish_time = !is_null($r['finish_time']) ? $r['finish_time'] : strtotime($r['contest']->finish_time);
+        $start_time = !is_null($r['start_time']) ? $r['start_time'] : $r['contest']->start_time;
+        $finish_time = !is_null($r['finish_time']) ? $r['finish_time'] : $r['contest']->finish_time;
 
         // Validate start & finish time
         if ($start_time > $finish_time) {
@@ -895,7 +894,7 @@ class ContestController extends Controller {
 
         if ($is_update) {
             // Prevent date changes if a contest already has runs
-            if (!is_null($r['start_time']) && $r['start_time'] != strtotime($r['contest']->start_time)) {
+            if (!is_null($r['start_time']) && $r['start_time'] != $r['contest']->start_time) {
                 $runCount = 0;
 
                 try {
@@ -1822,7 +1821,7 @@ class ContestController extends Controller {
 
         $request->accepted = $resolution;
         $request->extra_note = $r['note'];
-        $request->last_update = gmdate('Y-m-d H:i:s');
+        $request->last_update = time();
 
         ContestUserRequestDAO::save($request);
 
@@ -1967,12 +1966,8 @@ class ContestController extends Controller {
         $valueProperties = array(
             'title',
             'description',
-            'start_time'        => array('transform' => function ($value) {
-                return gmdate('Y-m-d H:i:s', $value);
-            }),
-            'finish_time'       => array('transform' => function ($value) {
-                return gmdate('Y-m-d H:i:s', $value);
-            }),
+            'start_time',
+            'finish_time',
             'window_length' => array('transform' => function ($value) {
                 return $value == 'NULL' ? null : $value;
             }),

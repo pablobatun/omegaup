@@ -35,7 +35,7 @@ class ContestsDAO extends ContestsDAOBase
 
     final public static function getByAlias($alias)
     {
-        $sql = 'SELECT * FROM Contests WHERE (alias = ? ) LIMIT 1;';
+        $sql = 'SELECT ' . ContestsDAO::$getContestsColumns . ' FROM Contests WHERE (alias = ? ) LIMIT 1;';
         $params = array(  $alias );
 
         global $conn;
@@ -64,16 +64,17 @@ class ContestsDAO extends ContestsDAOBase
     }
 
     public static function hasStarted(Contests $contest) {
-        return time() >= strtotime($contest->start_time);
+        return time() >= $contest->start_time;
     }
 
     public static function hasFinished(Contests $contest) {
-        return time() >= strtotime($contest->finish_time);
+        return time() >= $contest->finish_time;
     }
 
     public static function isInsideContest(Contests $contest, $user_id) {
-        if (time() > strtotime($contest->finish_time) ||
-            time() < strtotime($contest->start_time)) {
+        $time = time();
+        if ($time > $contest->finish_time ||
+            $time < $contest->start_time) {
             return false;
         }
         if (is_null($contest->window_length)) {
@@ -82,11 +83,11 @@ class ContestsDAO extends ContestsDAOBase
         $contest_user = ContestsUsersDAO::getByPK($user_id, $contest->contest_id);
         $first_access_time = $contest_user->access_time;
 
-        return time() <= strtotime($first_access_time) + $contest->window_length * 60;
+        return $time <= $first_access_time + $contest->window_length * 60;
     }
 
     public static function getContestsParticipated($user_id) {
-        $sql = 'SELECT * from Contests WHERE contest_id IN ('
+        $sql = 'SELECT ' . ContestsDAO::$getContestsColumns . ' from Contests WHERE contest_id IN ('
                     . 'SELECT DISTINCT contest_id FROM Runs WHERE user_id = ? AND test = 0 AND contest_id IS NOT NULL'
                . ')'
                . 'ORDER BY contest_id DESC';

@@ -30,6 +30,7 @@ class ResetCreateTest extends OmegaupTestCase {
         $r = new Request(array('email' => $user_data['email']));
         $response = ResetController::apiCreate($r);
 
+        $message = null;
         try {
             ResetController::apiCreate($r);
         } catch (InvalidParameterException $expected) {

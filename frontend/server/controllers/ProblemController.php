@@ -1126,7 +1126,6 @@ class ProblemController extends Controller {
                     $filtered = $run->asFilteredArray($relevant_columns);
                     $filtered['alias'] = $r['problem']->alias;
                     $filtered['username'] = $r['current_user']->username;
-                    $filtered['time'] = strtotime($filtered['time']);
                     array_push($runs_filtered_array, $filtered);
                 }
             }
@@ -1287,7 +1286,6 @@ class ProblemController extends Controller {
                     $runs_filtered_array = array();
                     foreach ($runs_array as $run) {
                         $filtered = $run->asFilteredArray($relevant_columns);
-                        $filtered['time'] = strtotime($filtered['time']);
                         $filtered['username'] = $r['current_user']->username;
                         $filtered['alias'] = $r['problem']->alias;
                         array_push($response['runs'], $filtered);
@@ -1636,7 +1634,7 @@ class ProblemController extends Controller {
             if (is_null($r['contest'])) {
                 $score = RunsDAO::GetBestScore($r['problem']->problem_id, $current_user_id);
             } else {
-                $bestRun = RunsDAO::GetBestRun($r['contest']->contest_id, $r['problem']->problem_id, $current_user_id, strtotime($r['contest']->finish_time), false /*showAllRuns*/);
+                $bestRun = RunsDAO::GetBestRun($r['contest']->contest_id, $r['problem']->problem_id, $current_user_id, $r['contest']->finish_time, false /*showAllRuns*/);
                 $score = is_null($bestRun->contest_score) ? 0 : $bestRun->contest_score;
             }
         } catch (Exception $e) {
