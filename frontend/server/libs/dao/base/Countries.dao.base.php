@@ -53,7 +53,7 @@ abstract class CountriesDAOBase extends DAO
 	public static final function getByPK(  $country_id )
 	{
 		if(  is_null( $country_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Countries WHERE (country_id = ? ) LIMIT 1;";
+		$sql = "SELECT `country_id`, `name` FROM Countries WHERE (country_id = ? ) LIMIT 1;";
 		$params = array(  $country_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class CountriesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Countries";
+		$sql = "SELECT `country_id`, `name` from Countries";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class CountriesDAOBase extends DAO
 			return self::search(new Countries($Countries));
 		}
 
-		$sql = "SELECT * from Countries WHERE (";
+		$sql = "SELECT `country_id`, `name` from Countries WHERE (";
 		$val = array();
 		if (!is_null( $Countries->country_id)) {
 			$sql .= " `country_id` = ? AND";

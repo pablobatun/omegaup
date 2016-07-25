@@ -53,7 +53,7 @@ abstract class TagsDAOBase extends DAO
 	public static final function getByPK(  $tag_id )
 	{
 		if(  is_null( $tag_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Tags WHERE (tag_id = ? ) LIMIT 1;";
+		$sql = "SELECT `tag_id`, `name` FROM Tags WHERE (tag_id = ? ) LIMIT 1;";
 		$params = array(  $tag_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class TagsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Tags";
+		$sql = "SELECT `tag_id`, `name` from Tags";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class TagsDAOBase extends DAO
 			return self::search(new Tags($Tags));
 		}
 
-		$sql = "SELECT * from Tags WHERE (";
+		$sql = "SELECT `tag_id`, `name` from Tags WHERE (";
 		$val = array();
 		if (!is_null( $Tags->tag_id)) {
 			$sql .= " `tag_id` = ? AND";

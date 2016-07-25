@@ -53,7 +53,7 @@ abstract class ProblemsBadgesDAOBase extends DAO
 	public static final function getByPK(  $badge_id, $problem_id )
 	{
 		if(  is_null( $badge_id ) || is_null( $problem_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Problems_Badges WHERE (badge_id = ? AND problem_id = ? ) LIMIT 1;";
+		$sql = "SELECT `badge_id`, `problem_id` FROM Problems_Badges WHERE (badge_id = ? AND problem_id = ? ) LIMIT 1;";
 		$params = array(  $badge_id, $problem_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class ProblemsBadgesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Problems_Badges";
+		$sql = "SELECT `badge_id`, `problem_id` from Problems_Badges";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class ProblemsBadgesDAOBase extends DAO
 			return self::search(new ProblemsBadges($Problems_Badges));
 		}
 
-		$sql = "SELECT * from Problems_Badges WHERE (";
+		$sql = "SELECT `badge_id`, `problem_id` from Problems_Badges WHERE (";
 		$val = array();
 		if (!is_null( $Problems_Badges->badge_id)) {
 			$sql .= " `badge_id` = ? AND";

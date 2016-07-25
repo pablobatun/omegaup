@@ -53,7 +53,7 @@ abstract class ContestUserRequestHistoryDAOBase extends DAO
 	public static final function getByPK(  $history_id )
 	{
 		if(  is_null( $history_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Contest_User_Request_History WHERE (history_id = ? ) LIMIT 1;";
+		$sql = "SELECT `history_id`, `user_id`, `contest_id`, UNIX_TIMESTAMP(time) AS `time`, `accepted`, `admin_id` FROM Contest_User_Request_History WHERE (history_id = ? ) LIMIT 1;";
 		$params = array(  $history_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class ContestUserRequestHistoryDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Contest_User_Request_History";
+		$sql = "SELECT `history_id`, `user_id`, `contest_id`, UNIX_TIMESTAMP(time) AS `time`, `accepted`, `admin_id` from Contest_User_Request_History";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class ContestUserRequestHistoryDAOBase extends DAO
 			return self::search(new ContestUserRequestHistory($Contest_User_Request_History));
 		}
 
-		$sql = "SELECT * from Contest_User_Request_History WHERE (";
+		$sql = "SELECT `history_id`, `user_id`, `contest_id`, UNIX_TIMESTAMP(time) AS `time`, `accepted`, `admin_id` from Contest_User_Request_History WHERE (";
 		$val = array();
 		if (!is_null( $Contest_User_Request_History->history_id)) {
 			$sql .= " `history_id` = ? AND";
@@ -187,7 +187,7 @@ abstract class ContestUserRequestHistoryDAOBase extends DAO
 	  **/
 	private static final function update($Contest_User_Request_History)
 	{
-		$sql = "UPDATE Contest_User_Request_History SET  `user_id` = ?, `contest_id` = ?, `time` = ?, `accepted` = ?, `admin_id` = ? WHERE  `history_id` = ?;";
+		$sql = "UPDATE Contest_User_Request_History SET  `user_id` = ?, `contest_id` = ?, `time` = FROM_UNIXTIME(?), `accepted` = ?, `admin_id` = ? WHERE  `history_id` = ?;";
 		$params = array(
 			$Contest_User_Request_History->user_id,
 			$Contest_User_Request_History->contest_id,
@@ -214,8 +214,8 @@ abstract class ContestUserRequestHistoryDAOBase extends DAO
 	  **/
 	private static final function create( $Contest_User_Request_History )
 	{
-		if (is_null($Contest_User_Request_History->time)) $Contest_User_Request_History->time = gmdate('Y-m-d H:i:s');
-		$sql = "INSERT INTO Contest_User_Request_History ( `history_id`, `user_id`, `contest_id`, `time`, `accepted`, `admin_id` ) VALUES ( ?, ?, ?, ?, ?, ?);";
+		if (is_null($Contest_User_Request_History->time)) $Contest_User_Request_History->time = time();
+		$sql = "INSERT INTO Contest_User_Request_History ( `history_id`, `user_id`, `contest_id`, `time`, `accepted`, `admin_id` ) VALUES ( ?, ?, ?, FROM_UNIXTIME(?), ?, ?);";
 		$params = array(
 			$Contest_User_Request_History->history_id,
 			$Contest_User_Request_History->user_id,

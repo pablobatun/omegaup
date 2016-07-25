@@ -53,7 +53,7 @@ abstract class GroupsScoreboardsContestsDAOBase extends DAO
 	public static final function getByPK(  $group_scoreboard_id, $contest_id )
 	{
 		if(  is_null( $group_scoreboard_id ) || is_null( $contest_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Groups_Scoreboards_Contests WHERE (group_scoreboard_id = ? AND contest_id = ? ) LIMIT 1;";
+		$sql = "SELECT `group_scoreboard_id`, `contest_id`, `only_ac`, `weight` FROM Groups_Scoreboards_Contests WHERE (group_scoreboard_id = ? AND contest_id = ? ) LIMIT 1;";
 		$params = array(  $group_scoreboard_id, $contest_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class GroupsScoreboardsContestsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Groups_Scoreboards_Contests";
+		$sql = "SELECT `group_scoreboard_id`, `contest_id`, `only_ac`, `weight` from Groups_Scoreboards_Contests";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class GroupsScoreboardsContestsDAOBase extends DAO
 			return self::search(new GroupsScoreboardsContests($Groups_Scoreboards_Contests));
 		}
 
-		$sql = "SELECT * from Groups_Scoreboards_Contests WHERE (";
+		$sql = "SELECT `group_scoreboard_id`, `contest_id`, `only_ac`, `weight` from Groups_Scoreboards_Contests WHERE (";
 		$val = array();
 		if (!is_null( $Groups_Scoreboards_Contests->group_scoreboard_id)) {
 			$sql .= " `group_scoreboard_id` = ? AND";

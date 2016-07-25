@@ -53,7 +53,7 @@ abstract class ContestProblemOpenedDAOBase extends DAO
 	public static final function getByPK(  $contest_id, $problem_id, $user_id )
 	{
 		if(  is_null( $contest_id ) || is_null( $problem_id ) || is_null( $user_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Contest_Problem_Opened WHERE (contest_id = ? AND problem_id = ? AND user_id = ? ) LIMIT 1;";
+		$sql = "SELECT `contest_id`, `problem_id`, `user_id`, UNIX_TIMESTAMP(open_time) AS `open_time` FROM Contest_Problem_Opened WHERE (contest_id = ? AND problem_id = ? AND user_id = ? ) LIMIT 1;";
 		$params = array(  $contest_id, $problem_id, $user_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class ContestProblemOpenedDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Contest_Problem_Opened";
+		$sql = "SELECT `contest_id`, `problem_id`, `user_id`, UNIX_TIMESTAMP(open_time) AS `open_time` from Contest_Problem_Opened";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class ContestProblemOpenedDAOBase extends DAO
 			return self::search(new ContestProblemOpened($Contest_Problem_Opened));
 		}
 
-		$sql = "SELECT * from Contest_Problem_Opened WHERE (";
+		$sql = "SELECT `contest_id`, `problem_id`, `user_id`, UNIX_TIMESTAMP(open_time) AS `open_time` from Contest_Problem_Opened WHERE (";
 		$val = array();
 		if (!is_null( $Contest_Problem_Opened->contest_id)) {
 			$sql .= " `contest_id` = ? AND";
@@ -179,7 +179,7 @@ abstract class ContestProblemOpenedDAOBase extends DAO
 	  **/
 	private static final function update($Contest_Problem_Opened)
 	{
-		$sql = "UPDATE Contest_Problem_Opened SET  `open_time` = ? WHERE  `contest_id` = ? AND `problem_id` = ? AND `user_id` = ?;";
+		$sql = "UPDATE Contest_Problem_Opened SET  `open_time` = FROM_UNIXTIME(?) WHERE  `contest_id` = ? AND `problem_id` = ? AND `user_id` = ?;";
 		$params = array(
 			$Contest_Problem_Opened->open_time,
 			$Contest_Problem_Opened->contest_id,$Contest_Problem_Opened->problem_id,$Contest_Problem_Opened->user_id, );
@@ -202,8 +202,8 @@ abstract class ContestProblemOpenedDAOBase extends DAO
 	  **/
 	private static final function create( $Contest_Problem_Opened )
 	{
-		if (is_null($Contest_Problem_Opened->open_time)) $Contest_Problem_Opened->open_time = gmdate('Y-m-d H:i:s');
-		$sql = "INSERT INTO Contest_Problem_Opened ( `contest_id`, `problem_id`, `user_id`, `open_time` ) VALUES ( ?, ?, ?, ?);";
+		if (is_null($Contest_Problem_Opened->open_time)) $Contest_Problem_Opened->open_time = time();
+		$sql = "INSERT INTO Contest_Problem_Opened ( `contest_id`, `problem_id`, `user_id`, `open_time` ) VALUES ( ?, ?, ?, FROM_UNIXTIME(?));";
 		$params = array(
 			$Contest_Problem_Opened->contest_id,
 			$Contest_Problem_Opened->problem_id,

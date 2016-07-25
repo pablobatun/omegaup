@@ -53,7 +53,7 @@ abstract class GroupsScoreboardsDAOBase extends DAO
 	public static final function getByPK(  $group_scoreboard_id )
 	{
 		if(  is_null( $group_scoreboard_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Groups_Scoreboards WHERE (group_scoreboard_id = ? ) LIMIT 1;";
+		$sql = "SELECT `group_scoreboard_id`, `group_id`, UNIX_TIMESTAMP(create_time) AS `create_time`, `alias`, `name`, `description` FROM Groups_Scoreboards WHERE (group_scoreboard_id = ? ) LIMIT 1;";
 		$params = array(  $group_scoreboard_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class GroupsScoreboardsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Groups_Scoreboards";
+		$sql = "SELECT `group_scoreboard_id`, `group_id`, UNIX_TIMESTAMP(create_time) AS `create_time`, `alias`, `name`, `description` from Groups_Scoreboards";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class GroupsScoreboardsDAOBase extends DAO
 			return self::search(new GroupsScoreboards($Groups_Scoreboards));
 		}
 
-		$sql = "SELECT * from Groups_Scoreboards WHERE (";
+		$sql = "SELECT `group_scoreboard_id`, `group_id`, UNIX_TIMESTAMP(create_time) AS `create_time`, `alias`, `name`, `description` from Groups_Scoreboards WHERE (";
 		$val = array();
 		if (!is_null( $Groups_Scoreboards->group_scoreboard_id)) {
 			$sql .= " `group_scoreboard_id` = ? AND";
@@ -187,7 +187,7 @@ abstract class GroupsScoreboardsDAOBase extends DAO
 	  **/
 	private static final function update($Groups_Scoreboards)
 	{
-		$sql = "UPDATE Groups_Scoreboards SET  `group_id` = ?, `create_time` = ?, `alias` = ?, `name` = ?, `description` = ? WHERE  `group_scoreboard_id` = ?;";
+		$sql = "UPDATE Groups_Scoreboards SET  `group_id` = ?, `create_time` = FROM_UNIXTIME(?), `alias` = ?, `name` = ?, `description` = ? WHERE  `group_scoreboard_id` = ?;";
 		$params = array(
 			$Groups_Scoreboards->group_id,
 			$Groups_Scoreboards->create_time,
@@ -214,8 +214,8 @@ abstract class GroupsScoreboardsDAOBase extends DAO
 	  **/
 	private static final function create( $Groups_Scoreboards )
 	{
-		if (is_null($Groups_Scoreboards->create_time)) $Groups_Scoreboards->create_time = gmdate('Y-m-d H:i:s');
-		$sql = "INSERT INTO Groups_Scoreboards ( `group_scoreboard_id`, `group_id`, `create_time`, `alias`, `name`, `description` ) VALUES ( ?, ?, ?, ?, ?, ?);";
+		if (is_null($Groups_Scoreboards->create_time)) $Groups_Scoreboards->create_time = time();
+		$sql = "INSERT INTO Groups_Scoreboards ( `group_scoreboard_id`, `group_id`, `create_time`, `alias`, `name`, `description` ) VALUES ( ?, ?, FROM_UNIXTIME(?), ?, ?, ?);";
 		$params = array(
 			$Groups_Scoreboards->group_scoreboard_id,
 			$Groups_Scoreboards->group_id,

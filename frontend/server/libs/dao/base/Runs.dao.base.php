@@ -53,7 +53,7 @@ abstract class RunsDAOBase extends DAO
 	public static final function getByPK(  $run_id )
 	{
 		if(  is_null( $run_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Runs WHERE (run_id = ? ) LIMIT 1;";
+		$sql = "SELECT `run_id`, `user_id`, `problem_id`, `contest_id`, `guid`, `language`, `status`, `verdict`, `runtime`, `penalty`, `memory`, `score`, `contest_score`, UNIX_TIMESTAMP(time) AS `time`, `submit_delay`, `test`, `judged_by` FROM Runs WHERE (run_id = ? ) LIMIT 1;";
 		$params = array(  $run_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class RunsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Runs";
+		$sql = "SELECT `run_id`, `user_id`, `problem_id`, `contest_id`, `guid`, `language`, `status`, `verdict`, `runtime`, `penalty`, `memory`, `score`, `contest_score`, UNIX_TIMESTAMP(time) AS `time`, `submit_delay`, `test`, `judged_by` from Runs";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class RunsDAOBase extends DAO
 			return self::search(new Runs($Runs));
 		}
 
-		$sql = "SELECT * from Runs WHERE (";
+		$sql = "SELECT `run_id`, `user_id`, `problem_id`, `contest_id`, `guid`, `language`, `status`, `verdict`, `runtime`, `penalty`, `memory`, `score`, `contest_score`, UNIX_TIMESTAMP(time) AS `time`, `submit_delay`, `test`, `judged_by` from Runs WHERE (";
 		$val = array();
 		if (!is_null( $Runs->run_id)) {
 			$sql .= " `run_id` = ? AND";
@@ -231,7 +231,7 @@ abstract class RunsDAOBase extends DAO
 	  **/
 	private static final function update($Runs)
 	{
-		$sql = "UPDATE Runs SET  `user_id` = ?, `problem_id` = ?, `contest_id` = ?, `guid` = ?, `language` = ?, `status` = ?, `verdict` = ?, `runtime` = ?, `penalty` = ?, `memory` = ?, `score` = ?, `contest_score` = ?, `time` = ?, `submit_delay` = ?, `test` = ?, `judged_by` = ? WHERE  `run_id` = ?;";
+		$sql = "UPDATE Runs SET  `user_id` = ?, `problem_id` = ?, `contest_id` = ?, `guid` = ?, `language` = ?, `status` = ?, `verdict` = ?, `runtime` = ?, `penalty` = ?, `memory` = ?, `score` = ?, `contest_score` = ?, `time` = FROM_UNIXTIME(?), `submit_delay` = ?, `test` = ?, `judged_by` = ? WHERE  `run_id` = ?;";
 		$params = array(
 			$Runs->user_id,
 			$Runs->problem_id,
@@ -274,10 +274,10 @@ abstract class RunsDAOBase extends DAO
 		if (is_null($Runs->penalty)) $Runs->penalty = '0';
 		if (is_null($Runs->memory)) $Runs->memory = '0';
 		if (is_null($Runs->score)) $Runs->score = '0';
-		if (is_null($Runs->time)) $Runs->time = gmdate('Y-m-d H:i:s');
+		if (is_null($Runs->time)) $Runs->time = time();
 		if (is_null($Runs->submit_delay)) $Runs->submit_delay = '0';
 		if (is_null($Runs->test)) $Runs->test = '0';
-		$sql = "INSERT INTO Runs ( `run_id`, `user_id`, `problem_id`, `contest_id`, `guid`, `language`, `status`, `verdict`, `runtime`, `penalty`, `memory`, `score`, `contest_score`, `time`, `submit_delay`, `test`, `judged_by` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		$sql = "INSERT INTO Runs ( `run_id`, `user_id`, `problem_id`, `contest_id`, `guid`, `language`, `status`, `verdict`, `runtime`, `penalty`, `memory`, `score`, `contest_score`, `time`, `submit_delay`, `test`, `judged_by` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), ?, ?, ?);";
 		$params = array(
 			$Runs->run_id,
 			$Runs->user_id,

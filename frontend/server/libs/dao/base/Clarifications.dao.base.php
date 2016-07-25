@@ -53,7 +53,7 @@ abstract class ClarificationsDAOBase extends DAO
 	public static final function getByPK(  $clarification_id )
 	{
 		if(  is_null( $clarification_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Clarifications WHERE (clarification_id = ? ) LIMIT 1;";
+		$sql = "SELECT `clarification_id`, `author_id`, `message`, `answer`, UNIX_TIMESTAMP(time) AS `time`, `problem_id`, `contest_id`, `public` FROM Clarifications WHERE (clarification_id = ? ) LIMIT 1;";
 		$params = array(  $clarification_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class ClarificationsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Clarifications";
+		$sql = "SELECT `clarification_id`, `author_id`, `message`, `answer`, UNIX_TIMESTAMP(time) AS `time`, `problem_id`, `contest_id`, `public` from Clarifications";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class ClarificationsDAOBase extends DAO
 			return self::search(new Clarifications($Clarifications));
 		}
 
-		$sql = "SELECT * from Clarifications WHERE (";
+		$sql = "SELECT `clarification_id`, `author_id`, `message`, `answer`, UNIX_TIMESTAMP(time) AS `time`, `problem_id`, `contest_id`, `public` from Clarifications WHERE (";
 		$val = array();
 		if (!is_null( $Clarifications->clarification_id)) {
 			$sql .= " `clarification_id` = ? AND";
@@ -195,7 +195,7 @@ abstract class ClarificationsDAOBase extends DAO
 	  **/
 	private static final function update($Clarifications)
 	{
-		$sql = "UPDATE Clarifications SET  `author_id` = ?, `message` = ?, `answer` = ?, `time` = ?, `problem_id` = ?, `contest_id` = ?, `public` = ? WHERE  `clarification_id` = ?;";
+		$sql = "UPDATE Clarifications SET  `author_id` = ?, `message` = ?, `answer` = ?, `time` = FROM_UNIXTIME(?), `problem_id` = ?, `contest_id` = ?, `public` = ? WHERE  `clarification_id` = ?;";
 		$params = array(
 			$Clarifications->author_id,
 			$Clarifications->message,
@@ -224,9 +224,9 @@ abstract class ClarificationsDAOBase extends DAO
 	  **/
 	private static final function create( $Clarifications )
 	{
-		if (is_null($Clarifications->time)) $Clarifications->time = gmdate('Y-m-d H:i:s');
+		if (is_null($Clarifications->time)) $Clarifications->time = time();
 		if (is_null($Clarifications->public)) $Clarifications->public = '0';
-		$sql = "INSERT INTO Clarifications ( `clarification_id`, `author_id`, `message`, `answer`, `time`, `problem_id`, `contest_id`, `public` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?);";
+		$sql = "INSERT INTO Clarifications ( `clarification_id`, `author_id`, `message`, `answer`, `time`, `problem_id`, `contest_id`, `public` ) VALUES ( ?, ?, ?, ?, FROM_UNIXTIME(?), ?, ?, ?);";
 		$params = array(
 			$Clarifications->clarification_id,
 			$Clarifications->author_id,

@@ -53,7 +53,7 @@ abstract class GroupsDAOBase extends DAO
 	public static final function getByPK(  $group_id )
 	{
 		if(  is_null( $group_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Groups WHERE (group_id = ? ) LIMIT 1;";
+		$sql = "SELECT `group_id`, `owner_id`, UNIX_TIMESTAMP(create_time) AS `create_time`, `alias`, `name`, `description` FROM Groups WHERE (group_id = ? ) LIMIT 1;";
 		$params = array(  $group_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class GroupsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Groups";
+		$sql = "SELECT `group_id`, `owner_id`, UNIX_TIMESTAMP(create_time) AS `create_time`, `alias`, `name`, `description` from Groups";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class GroupsDAOBase extends DAO
 			return self::search(new Groups($Groups));
 		}
 
-		$sql = "SELECT * from Groups WHERE (";
+		$sql = "SELECT `group_id`, `owner_id`, UNIX_TIMESTAMP(create_time) AS `create_time`, `alias`, `name`, `description` from Groups WHERE (";
 		$val = array();
 		if (!is_null( $Groups->group_id)) {
 			$sql .= " `group_id` = ? AND";
@@ -187,7 +187,7 @@ abstract class GroupsDAOBase extends DAO
 	  **/
 	private static final function update($Groups)
 	{
-		$sql = "UPDATE Groups SET  `owner_id` = ?, `create_time` = ?, `alias` = ?, `name` = ?, `description` = ? WHERE  `group_id` = ?;";
+		$sql = "UPDATE Groups SET  `owner_id` = ?, `create_time` = FROM_UNIXTIME(?), `alias` = ?, `name` = ?, `description` = ? WHERE  `group_id` = ?;";
 		$params = array(
 			$Groups->owner_id,
 			$Groups->create_time,
@@ -214,8 +214,8 @@ abstract class GroupsDAOBase extends DAO
 	  **/
 	private static final function create( $Groups )
 	{
-		if (is_null($Groups->create_time)) $Groups->create_time = gmdate('Y-m-d H:i:s');
-		$sql = "INSERT INTO Groups ( `group_id`, `owner_id`, `create_time`, `alias`, `name`, `description` ) VALUES ( ?, ?, ?, ?, ?, ?);";
+		if (is_null($Groups->create_time)) $Groups->create_time = time();
+		$sql = "INSERT INTO Groups ( `group_id`, `owner_id`, `create_time`, `alias`, `name`, `description` ) VALUES ( ?, ?, FROM_UNIXTIME(?), ?, ?, ?);";
 		$params = array(
 			$Groups->group_id,
 			$Groups->owner_id,

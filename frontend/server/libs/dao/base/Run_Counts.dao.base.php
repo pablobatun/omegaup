@@ -53,7 +53,7 @@ abstract class RunCountsDAOBase extends DAO
 	public static final function getByPK(  $date )
 	{
 		if(  is_null( $date )  ){ return NULL; }
-		$sql = "SELECT * FROM Run_Counts WHERE (date = ? ) LIMIT 1;";
+		$sql = "SELECT UNIX_TIMESTAMP(date) AS `date`, `total`, `ac_count` FROM Run_Counts WHERE (date = ? ) LIMIT 1;";
 		$params = array(  $date );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class RunCountsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Run_Counts";
+		$sql = "SELECT UNIX_TIMESTAMP(date) AS `date`, `total`, `ac_count` from Run_Counts";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class RunCountsDAOBase extends DAO
 			return self::search(new RunCounts($Run_Counts));
 		}
 
-		$sql = "SELECT * from Run_Counts WHERE (";
+		$sql = "SELECT UNIX_TIMESTAMP(date) AS `date`, `total`, `ac_count` from Run_Counts WHERE (";
 		$val = array();
 		if (!is_null( $Run_Counts->date)) {
 			$sql .= " `date` = ? AND";
@@ -201,7 +201,7 @@ abstract class RunCountsDAOBase extends DAO
 	{
 		if (is_null($Run_Counts->total)) $Run_Counts->total = 0;
 		if (is_null($Run_Counts->ac_count)) $Run_Counts->ac_count = 0;
-		$sql = "INSERT INTO Run_Counts ( `date`, `total`, `ac_count` ) VALUES ( ?, ?, ?);";
+		$sql = "INSERT INTO Run_Counts ( `date`, `total`, `ac_count` ) VALUES ( FROM_UNIXTIME(?), ?, ?);";
 		$params = array(
 			$Run_Counts->date,
 			$Run_Counts->total,

@@ -53,7 +53,7 @@ abstract class GroupsUsersDAOBase extends DAO
 	public static final function getByPK(  $group_id, $user_id )
 	{
 		if(  is_null( $group_id ) || is_null( $user_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Groups_Users WHERE (group_id = ? AND user_id = ? ) LIMIT 1;";
+		$sql = "SELECT `group_id`, `user_id` FROM Groups_Users WHERE (group_id = ? AND user_id = ? ) LIMIT 1;";
 		$params = array(  $group_id, $user_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class GroupsUsersDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Groups_Users";
+		$sql = "SELECT `group_id`, `user_id` from Groups_Users";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class GroupsUsersDAOBase extends DAO
 			return self::search(new GroupsUsers($Groups_Users));
 		}
 
-		$sql = "SELECT * from Groups_Users WHERE (";
+		$sql = "SELECT `group_id`, `user_id` from Groups_Users WHERE (";
 		$val = array();
 		if (!is_null( $Groups_Users->group_id)) {
 			$sql .= " `group_id` = ? AND";

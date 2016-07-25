@@ -61,16 +61,6 @@ class AuthTokens extends VO
 	}
 
 	/**
-	 * Converts date fields to timestamps
-	 **/
-	public function toUnixTime(array $fields = array()) {
-		if (count($fields) > 0)
-			parent::toUnixTime($fields);
-		else
-			parent::toUnixTime(array());
-	}
-
-	/**
 	  *  [Campo no documentado]
 	  * @access public
 	  * @var int(11)
@@ -88,7 +78,7 @@ class AuthTokens extends VO
 	/**
 	  *  [Campo no documentado]
 	  * @access public
-	  * @var TIMESTAMP
+	  * @var timestamp
 	  */
 	public $create_time;
 }

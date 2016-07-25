@@ -51,7 +51,7 @@ abstract class ContestAccessLogDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Contest_Access_Log";
+		$sql = "SELECT `contest_id`, `user_id`, `ip`, UNIX_TIMESTAMP(time) AS `time` from Contest_Access_Log";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -98,7 +98,7 @@ abstract class ContestAccessLogDAOBase extends DAO
 			return self::search(new ContestAccessLog($Contest_Access_Log));
 		}
 
-		$sql = "SELECT * from Contest_Access_Log WHERE (";
+		$sql = "SELECT `contest_id`, `user_id`, `ip`, UNIX_TIMESTAMP(time) AS `time` from Contest_Access_Log WHERE (";
 		$val = array();
 		if (!is_null( $Contest_Access_Log->contest_id)) {
 			$sql .= " `contest_id` = ? AND";
@@ -157,8 +157,8 @@ abstract class ContestAccessLogDAOBase extends DAO
 	  **/
 	private static final function create( $Contest_Access_Log )
 	{
-		if (is_null($Contest_Access_Log->time)) $Contest_Access_Log->time = gmdate('Y-m-d H:i:s');
-		$sql = "INSERT INTO Contest_Access_Log ( `contest_id`, `user_id`, `ip`, `time` ) VALUES ( ?, ?, ?, ?);";
+		if (is_null($Contest_Access_Log->time)) $Contest_Access_Log->time = time();
+		$sql = "INSERT INTO Contest_Access_Log ( `contest_id`, `user_id`, `ip`, `time` ) VALUES ( ?, ?, ?, FROM_UNIXTIME(?));";
 		$params = array(
 			$Contest_Access_Log->contest_id,
 			$Contest_Access_Log->user_id,

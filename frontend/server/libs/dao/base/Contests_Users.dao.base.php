@@ -53,7 +53,7 @@ abstract class ContestsUsersDAOBase extends DAO
 	public static final function getByPK(  $user_id, $contest_id )
 	{
 		if(  is_null( $user_id ) || is_null( $contest_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Contests_Users WHERE (user_id = ? AND contest_id = ? ) LIMIT 1;";
+		$sql = "SELECT `user_id`, `contest_id`, UNIX_TIMESTAMP(access_time) AS `access_time`, `score`, `time` FROM Contests_Users WHERE (user_id = ? AND contest_id = ? ) LIMIT 1;";
 		$params = array(  $user_id, $contest_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class ContestsUsersDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Contests_Users";
+		$sql = "SELECT `user_id`, `contest_id`, UNIX_TIMESTAMP(access_time) AS `access_time`, `score`, `time` from Contests_Users";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class ContestsUsersDAOBase extends DAO
 			return self::search(new ContestsUsers($Contests_Users));
 		}
 
-		$sql = "SELECT * from Contests_Users WHERE (";
+		$sql = "SELECT `user_id`, `contest_id`, UNIX_TIMESTAMP(access_time) AS `access_time`, `score`, `time` from Contests_Users WHERE (";
 		$val = array();
 		if (!is_null( $Contests_Users->user_id)) {
 			$sql .= " `user_id` = ? AND";
@@ -183,7 +183,7 @@ abstract class ContestsUsersDAOBase extends DAO
 	  **/
 	private static final function update($Contests_Users)
 	{
-		$sql = "UPDATE Contests_Users SET  `access_time` = ?, `score` = ?, `time` = ? WHERE  `user_id` = ? AND `contest_id` = ?;";
+		$sql = "UPDATE Contests_Users SET  `access_time` = FROM_UNIXTIME(?), `score` = ?, `time` = ? WHERE  `user_id` = ? AND `contest_id` = ?;";
 		$params = array(
 			$Contests_Users->access_time,
 			$Contests_Users->score,
@@ -211,7 +211,7 @@ abstract class ContestsUsersDAOBase extends DAO
 		if (is_null($Contests_Users->access_time)) $Contests_Users->access_time = '0000-00-00 00:00:00';
 		if (is_null($Contests_Users->score)) $Contests_Users->score = '1';
 		if (is_null($Contests_Users->time)) $Contests_Users->time = '1';
-		$sql = "INSERT INTO Contests_Users ( `user_id`, `contest_id`, `access_time`, `score`, `time` ) VALUES ( ?, ?, ?, ?, ?);";
+		$sql = "INSERT INTO Contests_Users ( `user_id`, `contest_id`, `access_time`, `score`, `time` ) VALUES ( ?, ?, FROM_UNIXTIME(?), ?, ?);";
 		$params = array(
 			$Contests_Users->user_id,
 			$Contests_Users->contest_id,

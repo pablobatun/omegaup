@@ -53,7 +53,7 @@ abstract class AuthTokensDAOBase extends DAO
 	public static final function getByPK(  $token )
 	{
 		if(  is_null( $token )  ){ return NULL; }
-		$sql = "SELECT * FROM Auth_Tokens WHERE (token = ? ) LIMIT 1;";
+		$sql = "SELECT `user_id`, `token`, UNIX_TIMESTAMP(create_time) AS `create_time` FROM Auth_Tokens WHERE (token = ? ) LIMIT 1;";
 		$params = array(  $token );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class AuthTokensDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Auth_Tokens";
+		$sql = "SELECT `user_id`, `token`, UNIX_TIMESTAMP(create_time) AS `create_time` from Auth_Tokens";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class AuthTokensDAOBase extends DAO
 			return self::search(new AuthTokens($Auth_Tokens));
 		}
 
-		$sql = "SELECT * from Auth_Tokens WHERE (";
+		$sql = "SELECT `user_id`, `token`, UNIX_TIMESTAMP(create_time) AS `create_time` from Auth_Tokens WHERE (";
 		$val = array();
 		if (!is_null( $Auth_Tokens->user_id)) {
 			$sql .= " `user_id` = ? AND";
@@ -175,7 +175,7 @@ abstract class AuthTokensDAOBase extends DAO
 	  **/
 	private static final function update($Auth_Tokens)
 	{
-		$sql = "UPDATE Auth_Tokens SET  `user_id` = ?, `create_time` = ? WHERE  `token` = ?;";
+		$sql = "UPDATE Auth_Tokens SET  `user_id` = ?, `create_time` = FROM_UNIXTIME(?) WHERE  `token` = ?;";
 		$params = array(
 			$Auth_Tokens->user_id,
 			$Auth_Tokens->create_time,
@@ -199,8 +199,8 @@ abstract class AuthTokensDAOBase extends DAO
 	  **/
 	private static final function create( $Auth_Tokens )
 	{
-		if (is_null($Auth_Tokens->create_time)) $Auth_Tokens->create_time = gmdate('Y-m-d H:i:s');
-		$sql = "INSERT INTO Auth_Tokens ( `user_id`, `token`, `create_time` ) VALUES ( ?, ?, ?);";
+		if (is_null($Auth_Tokens->create_time)) $Auth_Tokens->create_time = time();
+		$sql = "INSERT INTO Auth_Tokens ( `user_id`, `token`, `create_time` ) VALUES ( ?, ?, FROM_UNIXTIME(?));";
 		$params = array(
 			$Auth_Tokens->user_id,
 			$Auth_Tokens->token,

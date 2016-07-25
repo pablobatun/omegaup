@@ -53,7 +53,7 @@ abstract class UsersBadgesDAOBase extends DAO
 	public static final function getByPK(  $badge_id, $user_id )
 	{
 		if(  is_null( $badge_id ) || is_null( $user_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Users_Badges WHERE (badge_id = ? AND user_id = ? ) LIMIT 1;";
+		$sql = "SELECT `badge_id`, `user_id`, UNIX_TIMESTAMP(time) AS `time`, `last_problem_id` FROM Users_Badges WHERE (badge_id = ? AND user_id = ? ) LIMIT 1;";
 		$params = array(  $badge_id, $user_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class UsersBadgesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Users_Badges";
+		$sql = "SELECT `badge_id`, `user_id`, UNIX_TIMESTAMP(time) AS `time`, `last_problem_id` from Users_Badges";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class UsersBadgesDAOBase extends DAO
 			return self::search(new UsersBadges($Users_Badges));
 		}
 
-		$sql = "SELECT * from Users_Badges WHERE (";
+		$sql = "SELECT `badge_id`, `user_id`, UNIX_TIMESTAMP(time) AS `time`, `last_problem_id` from Users_Badges WHERE (";
 		$val = array();
 		if (!is_null( $Users_Badges->badge_id)) {
 			$sql .= " `badge_id` = ? AND";
@@ -179,7 +179,7 @@ abstract class UsersBadgesDAOBase extends DAO
 	  **/
 	private static final function update($Users_Badges)
 	{
-		$sql = "UPDATE Users_Badges SET  `time` = ?, `last_problem_id` = ? WHERE  `badge_id` = ? AND `user_id` = ?;";
+		$sql = "UPDATE Users_Badges SET  `time` = FROM_UNIXTIME(?), `last_problem_id` = ? WHERE  `badge_id` = ? AND `user_id` = ?;";
 		$params = array(
 			$Users_Badges->time,
 			$Users_Badges->last_problem_id,
@@ -203,8 +203,8 @@ abstract class UsersBadgesDAOBase extends DAO
 	  **/
 	private static final function create( $Users_Badges )
 	{
-		if (is_null($Users_Badges->time)) $Users_Badges->time = gmdate('Y-m-d H:i:s');
-		$sql = "INSERT INTO Users_Badges ( `badge_id`, `user_id`, `time`, `last_problem_id` ) VALUES ( ?, ?, ?, ?);";
+		if (is_null($Users_Badges->time)) $Users_Badges->time = time();
+		$sql = "INSERT INTO Users_Badges ( `badge_id`, `user_id`, `time`, `last_problem_id` ) VALUES ( ?, ?, FROM_UNIXTIME(?), ?);";
 		$params = array(
 			$Users_Badges->badge_id,
 			$Users_Badges->user_id,

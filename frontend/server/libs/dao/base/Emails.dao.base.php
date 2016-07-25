@@ -53,7 +53,7 @@ abstract class EmailsDAOBase extends DAO
 	public static final function getByPK(  $email_id )
 	{
 		if(  is_null( $email_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Emails WHERE (email_id = ? ) LIMIT 1;";
+		$sql = "SELECT `email_id`, `email`, `user_id` FROM Emails WHERE (email_id = ? ) LIMIT 1;";
 		$params = array(  $email_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class EmailsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Emails";
+		$sql = "SELECT `email_id`, `email`, `user_id` from Emails";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class EmailsDAOBase extends DAO
 			return self::search(new Emails($Emails));
 		}
 
-		$sql = "SELECT * from Emails WHERE (";
+		$sql = "SELECT `email_id`, `email`, `user_id` from Emails WHERE (";
 		$val = array();
 		if (!is_null( $Emails->email_id)) {
 			$sql .= " `email_id` = ? AND";

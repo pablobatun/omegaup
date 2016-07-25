@@ -53,7 +53,7 @@ abstract class UserRankDAOBase extends DAO
 	public static final function getByPK(  $user_id )
 	{
 		if(  is_null( $user_id )  ){ return NULL; }
-		$sql = "SELECT * FROM User_Rank WHERE (user_id = ? ) LIMIT 1;";
+		$sql = "SELECT `user_id`, `rank`, `problems_solved_count`, `score`, `username`, `name`, `country_id` FROM User_Rank WHERE (user_id = ? ) LIMIT 1;";
 		$params = array(  $user_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class UserRankDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from User_Rank";
+		$sql = "SELECT `user_id`, `rank`, `problems_solved_count`, `score`, `username`, `name`, `country_id` from User_Rank";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class UserRankDAOBase extends DAO
 			return self::search(new UserRank($User_Rank));
 		}
 
-		$sql = "SELECT * from User_Rank WHERE (";
+		$sql = "SELECT `user_id`, `rank`, `problems_solved_count`, `score`, `username`, `name`, `country_id` from User_Rank WHERE (";
 		$val = array();
 		if (!is_null( $User_Rank->user_id)) {
 			$sql .= " `user_id` = ? AND";

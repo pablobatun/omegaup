@@ -73,16 +73,6 @@ class Messages extends VO
 	}
 
 	/**
-	 * Converts date fields to timestamps
-	 **/
-	public function toUnixTime(array $fields = array()) {
-		if (count($fields) > 0)
-			parent::toUnixTime($fields);
-		else
-			parent::toUnixTime(array("date"));
-	}
-
-	/**
 	  *  [Campo no documentado]
 	  * Llave Primaria
 	  * Auto Incremento

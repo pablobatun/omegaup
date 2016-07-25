@@ -53,7 +53,7 @@ abstract class AnnouncementDAOBase extends DAO
 	public static final function getByPK(  $announcement_id )
 	{
 		if(  is_null( $announcement_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Announcement WHERE (announcement_id = ? ) LIMIT 1;";
+		$sql = "SELECT `announcement_id`, `user_id`, UNIX_TIMESTAMP(time) AS `time`, `description` FROM Announcement WHERE (announcement_id = ? ) LIMIT 1;";
 		$params = array(  $announcement_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class AnnouncementDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Announcement";
+		$sql = "SELECT `announcement_id`, `user_id`, UNIX_TIMESTAMP(time) AS `time`, `description` from Announcement";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class AnnouncementDAOBase extends DAO
 			return self::search(new Announcement($Announcement));
 		}
 
-		$sql = "SELECT * from Announcement WHERE (";
+		$sql = "SELECT `announcement_id`, `user_id`, UNIX_TIMESTAMP(time) AS `time`, `description` from Announcement WHERE (";
 		$val = array();
 		if (!is_null( $Announcement->announcement_id)) {
 			$sql .= " `announcement_id` = ? AND";
@@ -179,7 +179,7 @@ abstract class AnnouncementDAOBase extends DAO
 	  **/
 	private static final function update($Announcement)
 	{
-		$sql = "UPDATE Announcement SET  `user_id` = ?, `time` = ?, `description` = ? WHERE  `announcement_id` = ?;";
+		$sql = "UPDATE Announcement SET  `user_id` = ?, `time` = FROM_UNIXTIME(?), `description` = ? WHERE  `announcement_id` = ?;";
 		$params = array(
 			$Announcement->user_id,
 			$Announcement->time,
@@ -204,8 +204,8 @@ abstract class AnnouncementDAOBase extends DAO
 	  **/
 	private static final function create( $Announcement )
 	{
-		if (is_null($Announcement->time)) $Announcement->time = gmdate('Y-m-d H:i:s');
-		$sql = "INSERT INTO Announcement ( `announcement_id`, `user_id`, `time`, `description` ) VALUES ( ?, ?, ?, ?);";
+		if (is_null($Announcement->time)) $Announcement->time = time();
+		$sql = "INSERT INTO Announcement ( `announcement_id`, `user_id`, `time`, `description` ) VALUES ( ?, ?, FROM_UNIXTIME(?), ?);";
 		$params = array(
 			$Announcement->announcement_id,
 			$Announcement->user_id,

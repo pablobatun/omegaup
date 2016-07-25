@@ -53,7 +53,7 @@ abstract class CoderOfTheMonthDAOBase extends DAO
 	public static final function getByPK(  $coder_of_the_month_id )
 	{
 		if(  is_null( $coder_of_the_month_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Coder_Of_The_Month WHERE (coder_of_the_month_id = ? ) LIMIT 1;";
+		$sql = "SELECT `coder_of_the_month_id`, `user_id`, `description`, UNIX_TIMESTAMP(time) AS `time`, `interview_url` FROM Coder_Of_The_Month WHERE (coder_of_the_month_id = ? ) LIMIT 1;";
 		$params = array(  $coder_of_the_month_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class CoderOfTheMonthDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Coder_Of_The_Month";
+		$sql = "SELECT `coder_of_the_month_id`, `user_id`, `description`, UNIX_TIMESTAMP(time) AS `time`, `interview_url` from Coder_Of_The_Month";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class CoderOfTheMonthDAOBase extends DAO
 			return self::search(new CoderOfTheMonth($Coder_Of_The_Month));
 		}
 
-		$sql = "SELECT * from Coder_Of_The_Month WHERE (";
+		$sql = "SELECT `coder_of_the_month_id`, `user_id`, `description`, UNIX_TIMESTAMP(time) AS `time`, `interview_url` from Coder_Of_The_Month WHERE (";
 		$val = array();
 		if (!is_null( $Coder_Of_The_Month->coder_of_the_month_id)) {
 			$sql .= " `coder_of_the_month_id` = ? AND";
@@ -183,7 +183,7 @@ abstract class CoderOfTheMonthDAOBase extends DAO
 	  **/
 	private static final function update($Coder_Of_The_Month)
 	{
-		$sql = "UPDATE Coder_Of_The_Month SET  `user_id` = ?, `description` = ?, `time` = ?, `interview_url` = ? WHERE  `coder_of_the_month_id` = ?;";
+		$sql = "UPDATE Coder_Of_The_Month SET  `user_id` = ?, `description` = ?, `time` = FROM_UNIXTIME(?), `interview_url` = ? WHERE  `coder_of_the_month_id` = ?;";
 		$params = array(
 			$Coder_Of_The_Month->user_id,
 			$Coder_Of_The_Month->description,
@@ -210,7 +210,7 @@ abstract class CoderOfTheMonthDAOBase extends DAO
 	private static final function create( $Coder_Of_The_Month )
 	{
 		if (is_null($Coder_Of_The_Month->time)) $Coder_Of_The_Month->time = '2000-01-01';
-		$sql = "INSERT INTO Coder_Of_The_Month ( `coder_of_the_month_id`, `user_id`, `description`, `time`, `interview_url` ) VALUES ( ?, ?, ?, ?, ?);";
+		$sql = "INSERT INTO Coder_Of_The_Month ( `coder_of_the_month_id`, `user_id`, `description`, `time`, `interview_url` ) VALUES ( ?, ?, ?, FROM_UNIXTIME(?), ?);";
 		$params = array(
 			$Coder_Of_The_Month->coder_of_the_month_id,
 			$Coder_Of_The_Month->user_id,

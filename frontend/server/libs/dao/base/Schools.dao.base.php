@@ -53,7 +53,7 @@ abstract class SchoolsDAOBase extends DAO
 	public static final function getByPK(  $school_id )
 	{
 		if(  is_null( $school_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Schools WHERE (school_id = ? ) LIMIT 1;";
+		$sql = "SELECT `school_id`, `state_id`, `country_id`, `name` FROM Schools WHERE (school_id = ? ) LIMIT 1;";
 		$params = array(  $school_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class SchoolsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Schools";
+		$sql = "SELECT `school_id`, `state_id`, `country_id`, `name` from Schools";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class SchoolsDAOBase extends DAO
 			return self::search(new Schools($Schools));
 		}
 
-		$sql = "SELECT * from Schools WHERE (";
+		$sql = "SELECT `school_id`, `state_id`, `country_id`, `name` from Schools WHERE (";
 		$val = array();
 		if (!is_null( $Schools->school_id)) {
 			$sql .= " `school_id` = ? AND";

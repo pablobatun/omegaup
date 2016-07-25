@@ -53,7 +53,7 @@ abstract class ProblemsDAOBase extends DAO
 	public static final function getByPK(  $problem_id )
 	{
 		if(  is_null( $problem_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Problems WHERE (problem_id = ? ) LIMIT 1;";
+		$sql = "SELECT `problem_id`, `public`, `author_id`, `title`, `alias`, `validator`, `languages`, `server`, `remote_id`, `time_limit`, `validator_time_limit`, `overall_wall_time_limit`, `extra_wall_time`, `memory_limit`, `output_limit`, `stack_limit`, `visits`, `submissions`, `accepted`, `difficulty`, UNIX_TIMESTAMP(creation_date) AS `creation_date`, `source`, `order`, `tolerance`, `slow`, `deprecated`, `email_clarifications` FROM Problems WHERE (problem_id = ? ) LIMIT 1;";
 		$params = array(  $problem_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class ProblemsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Problems";
+		$sql = "SELECT `problem_id`, `public`, `author_id`, `title`, `alias`, `validator`, `languages`, `server`, `remote_id`, `time_limit`, `validator_time_limit`, `overall_wall_time_limit`, `extra_wall_time`, `memory_limit`, `output_limit`, `stack_limit`, `visits`, `submissions`, `accepted`, `difficulty`, UNIX_TIMESTAMP(creation_date) AS `creation_date`, `source`, `order`, `tolerance`, `slow`, `deprecated`, `email_clarifications` from Problems";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class ProblemsDAOBase extends DAO
 			return self::search(new Problems($Problems));
 		}
 
-		$sql = "SELECT * from Problems WHERE (";
+		$sql = "SELECT `problem_id`, `public`, `author_id`, `title`, `alias`, `validator`, `languages`, `server`, `remote_id`, `time_limit`, `validator_time_limit`, `overall_wall_time_limit`, `extra_wall_time`, `memory_limit`, `output_limit`, `stack_limit`, `visits`, `submissions`, `accepted`, `difficulty`, UNIX_TIMESTAMP(creation_date) AS `creation_date`, `source`, `order`, `tolerance`, `slow`, `deprecated`, `email_clarifications` from Problems WHERE (";
 		$val = array();
 		if (!is_null( $Problems->problem_id)) {
 			$sql .= " `problem_id` = ? AND";
@@ -271,7 +271,7 @@ abstract class ProblemsDAOBase extends DAO
 	  **/
 	private static final function update($Problems)
 	{
-		$sql = "UPDATE Problems SET  `public` = ?, `author_id` = ?, `title` = ?, `alias` = ?, `validator` = ?, `languages` = ?, `server` = ?, `remote_id` = ?, `time_limit` = ?, `validator_time_limit` = ?, `overall_wall_time_limit` = ?, `extra_wall_time` = ?, `memory_limit` = ?, `output_limit` = ?, `stack_limit` = ?, `visits` = ?, `submissions` = ?, `accepted` = ?, `difficulty` = ?, `creation_date` = ?, `source` = ?, `order` = ?, `tolerance` = ?, `slow` = ?, `deprecated` = ?, `email_clarifications` = ? WHERE  `problem_id` = ?;";
+		$sql = "UPDATE Problems SET  `public` = ?, `author_id` = ?, `title` = ?, `alias` = ?, `validator` = ?, `languages` = ?, `server` = ?, `remote_id` = ?, `time_limit` = ?, `validator_time_limit` = ?, `overall_wall_time_limit` = ?, `extra_wall_time` = ?, `memory_limit` = ?, `output_limit` = ?, `stack_limit` = ?, `visits` = ?, `submissions` = ?, `accepted` = ?, `difficulty` = ?, `creation_date` = FROM_UNIXTIME(?), `source` = ?, `order` = ?, `tolerance` = ?, `slow` = ?, `deprecated` = ?, `email_clarifications` = ? WHERE  `problem_id` = ?;";
 		$params = array(
 			$Problems->public,
 			$Problems->author_id,
@@ -333,13 +333,13 @@ abstract class ProblemsDAOBase extends DAO
 		if (is_null($Problems->submissions)) $Problems->submissions = '0';
 		if (is_null($Problems->accepted)) $Problems->accepted = '0';
 		if (is_null($Problems->difficulty)) $Problems->difficulty = '0';
-		if (is_null($Problems->creation_date)) $Problems->creation_date = gmdate('Y-m-d H:i:s');
+		if (is_null($Problems->creation_date)) $Problems->creation_date = time();
 		if (is_null($Problems->order)) $Problems->order = 'normal';
 		if (is_null($Problems->tolerance)) $Problems->tolerance = 1e-9;
 		if (is_null($Problems->slow)) $Problems->slow = 0;
 		if (is_null($Problems->deprecated)) $Problems->deprecated = 0;
 		if (is_null($Problems->email_clarifications)) $Problems->email_clarifications = 0;
-		$sql = "INSERT INTO Problems ( `problem_id`, `public`, `author_id`, `title`, `alias`, `validator`, `languages`, `server`, `remote_id`, `time_limit`, `validator_time_limit`, `overall_wall_time_limit`, `extra_wall_time`, `memory_limit`, `output_limit`, `stack_limit`, `visits`, `submissions`, `accepted`, `difficulty`, `creation_date`, `source`, `order`, `tolerance`, `slow`, `deprecated`, `email_clarifications` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		$sql = "INSERT INTO Problems ( `problem_id`, `public`, `author_id`, `title`, `alias`, `validator`, `languages`, `server`, `remote_id`, `time_limit`, `validator_time_limit`, `overall_wall_time_limit`, `extra_wall_time`, `memory_limit`, `output_limit`, `stack_limit`, `visits`, `submissions`, `accepted`, `difficulty`, `creation_date`, `source`, `order`, `tolerance`, `slow`, `deprecated`, `email_clarifications` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), ?, ?, ?, ?, ?, ?);";
 		$params = array(
 			$Problems->problem_id,
 			$Problems->public,

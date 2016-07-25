@@ -53,7 +53,7 @@ abstract class FavoritesDAOBase extends DAO
 	public static final function getByPK(  $user_id, $problem_id )
 	{
 		if(  is_null( $user_id ) || is_null( $problem_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Favorites WHERE (user_id = ? AND problem_id = ? ) LIMIT 1;";
+		$sql = "SELECT `user_id`, `problem_id` FROM Favorites WHERE (user_id = ? AND problem_id = ? ) LIMIT 1;";
 		$params = array(  $user_id, $problem_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class FavoritesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Favorites";
+		$sql = "SELECT `user_id`, `problem_id` from Favorites";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class FavoritesDAOBase extends DAO
 			return self::search(new Favorites($Favorites));
 		}
 
-		$sql = "SELECT * from Favorites WHERE (";
+		$sql = "SELECT `user_id`, `problem_id` from Favorites WHERE (";
 		$val = array();
 		if (!is_null( $Favorites->user_id)) {
 			$sql .= " `user_id` = ? AND";

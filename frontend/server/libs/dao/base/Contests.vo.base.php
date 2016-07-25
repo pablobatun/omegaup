@@ -149,16 +149,6 @@ class Contests extends VO
 	}
 
 	/**
-	 * Converts date fields to timestamps
-	 **/
-	public function toUnixTime(array $fields = array()) {
-		if (count($fields) > 0)
-			parent::toUnixTime($fields);
-		else
-			parent::toUnixTime(array("start_time", "finish_time"));
-	}
-
-	/**
 	  * El identificador unico para cada concurso
 	  * Llave Primaria
 	  * Auto Incremento
@@ -289,21 +279,21 @@ class Contests extends VO
 	/**
 	  * 'Mostrar el scoreboard automáticamente después del concurso
 	  * @access public
-	  * @var BOOL
+	  * @var bool
 	  */
 	public $show_scoreboard_after;
 
 	/**
 	  *  [Campo no documentado]
 	  * @access public
-	  * @var VARCHAR(
+	  * @var varchar(
 	  */
 	public $scoreboard_url;
 
 	/**
 	  *  [Campo no documentado]
 	  * @access public
-	  * @var VARCHAR(
+	  * @var varchar(
 	  */
 	public $scoreboard_url_admin;
 
@@ -331,7 +321,7 @@ class Contests extends VO
 	/**
 	  * 'Mostrar el concurso en la lista de recomendados.
 	  * @access public
-	  * @var BOOL
+	  * @var bool
 	  */
 	public $recommended;
 }

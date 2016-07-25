@@ -133,16 +133,6 @@ class Users extends VO
 	}
 
 	/**
-	 * Converts date fields to timestamps
-	 **/
-	public function toUnixTime(array $fields = array()) {
-		if (count($fields) > 0)
-			parent::toUnixTime($fields);
-		else
-			parent::toUnixTime(array("last_access"));
-	}
-
-	/**
 	  *  [Campo no documentado]
 	  * Llave Primaria
 	  * Auto Incremento
@@ -259,28 +249,28 @@ class Users extends VO
 	/**
 	  *  [Campo no documentado]
 	  * @access public
-	  * @var BOOLEAN
+	  * @var boolean
 	  */
 	public $verified;
 
 	/**
 	  *  [Campo no documentado]
 	  * @access public
-	  * @var VARCHAR(
+	  * @var varchar(
 	  */
 	public $verification_id;
 
 	/**
 	  *  [Campo no documentado]
 	  * @access public
-	  * @var VARCHAR(45)
+	  * @var varchar(45)
 	  */
 	public $reset_digest;
 
 	/**
 	  *  [Campo no documentado]
 	  * @access public
-	  * @var DATETIME
+	  * @var datetime
 	  */
 	public $reset_sent_at;
 

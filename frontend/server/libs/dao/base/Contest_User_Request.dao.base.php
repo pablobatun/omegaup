@@ -53,7 +53,7 @@ abstract class ContestUserRequestDAOBase extends DAO
 	public static final function getByPK(  $user_id, $contest_id )
 	{
 		if(  is_null( $user_id ) || is_null( $contest_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Contest_User_Request WHERE (user_id = ? AND contest_id = ? ) LIMIT 1;";
+		$sql = "SELECT `user_id`, `contest_id`, UNIX_TIMESTAMP(request_time) AS `request_time`, UNIX_TIMESTAMP(last_update) AS `last_update`, `accepted`, `extra_note` FROM Contest_User_Request WHERE (user_id = ? AND contest_id = ? ) LIMIT 1;";
 		$params = array(  $user_id, $contest_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class ContestUserRequestDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Contest_User_Request";
+		$sql = "SELECT `user_id`, `contest_id`, UNIX_TIMESTAMP(request_time) AS `request_time`, UNIX_TIMESTAMP(last_update) AS `last_update`, `accepted`, `extra_note` from Contest_User_Request";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class ContestUserRequestDAOBase extends DAO
 			return self::search(new ContestUserRequest($Contest_User_Request));
 		}
 
-		$sql = "SELECT * from Contest_User_Request WHERE (";
+		$sql = "SELECT `user_id`, `contest_id`, UNIX_TIMESTAMP(request_time) AS `request_time`, UNIX_TIMESTAMP(last_update) AS `last_update`, `accepted`, `extra_note` from Contest_User_Request WHERE (";
 		$val = array();
 		if (!is_null( $Contest_User_Request->user_id)) {
 			$sql .= " `user_id` = ? AND";
@@ -187,7 +187,7 @@ abstract class ContestUserRequestDAOBase extends DAO
 	  **/
 	private static final function update($Contest_User_Request)
 	{
-		$sql = "UPDATE Contest_User_Request SET  `request_time` = ?, `last_update` = ?, `accepted` = ?, `extra_note` = ? WHERE  `user_id` = ? AND `contest_id` = ?;";
+		$sql = "UPDATE Contest_User_Request SET  `request_time` = FROM_UNIXTIME(?), `last_update` = FROM_UNIXTIME(?), `accepted` = ?, `extra_note` = ? WHERE  `user_id` = ? AND `contest_id` = ?;";
 		$params = array(
 			$Contest_User_Request->request_time,
 			$Contest_User_Request->last_update,
@@ -213,8 +213,8 @@ abstract class ContestUserRequestDAOBase extends DAO
 	  **/
 	private static final function create( $Contest_User_Request )
 	{
-		if (is_null($Contest_User_Request->request_time)) $Contest_User_Request->request_time = gmdate('Y-m-d H:i:s');
-		$sql = "INSERT INTO Contest_User_Request ( `user_id`, `contest_id`, `request_time`, `last_update`, `accepted`, `extra_note` ) VALUES ( ?, ?, ?, ?, ?, ?);";
+		if (is_null($Contest_User_Request->request_time)) $Contest_User_Request->request_time = time();
+		$sql = "INSERT INTO Contest_User_Request ( `user_id`, `contest_id`, `request_time`, `last_update`, `accepted`, `extra_note` ) VALUES ( ?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?), ?, ?);";
 		$params = array(
 			$Contest_User_Request->user_id,
 			$Contest_User_Request->contest_id,

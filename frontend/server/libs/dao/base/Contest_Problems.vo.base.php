@@ -65,16 +65,6 @@ class ContestProblems extends VO
 	}
 
 	/**
-	 * Converts date fields to timestamps
-	 **/
-	public function toUnixTime(array $fields = array()) {
-		if (count($fields) > 0)
-			parent::toUnixTime($fields);
-		else
-			parent::toUnixTime(array());
-	}
-
-	/**
 	  *  [Campo no documentado]
 	  * Llave Primaria
 	  * @access public
@@ -100,7 +90,7 @@ class ContestProblems extends VO
 	/**
 	  * Define el orden de aparición de los problemas en un concurso
 	  * @access public
-	  * @var INT
+	  * @var int
 	  */
 	public $order;
 }

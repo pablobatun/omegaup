@@ -53,7 +53,7 @@ abstract class UsersDAOBase extends DAO
 	public static final function getByPK(  $user_id )
 	{
 		if(  is_null( $user_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Users WHERE (user_id = ? ) LIMIT 1;";
+		$sql = "SELECT `user_id`, `username`, `facebook_user_id`, `password`, `main_email_id`, `name`, `solved`, `submissions`, `country_id`, `state_id`, `school_id`, `scholar_degree`, `language_id`, UNIX_TIMESTAMP(graduation_date) AS `graduation_date`, UNIX_TIMESTAMP(birth_date) AS `birth_date`, UNIX_TIMESTAMP(last_access) AS `last_access`, `verified`, `verification_id`, `reset_digest`, UNIX_TIMESTAMP(reset_sent_at) AS `reset_sent_at`, `recruitment_optin` FROM Users WHERE (user_id = ? ) LIMIT 1;";
 		$params = array(  $user_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class UsersDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Users";
+		$sql = "SELECT `user_id`, `username`, `facebook_user_id`, `password`, `main_email_id`, `name`, `solved`, `submissions`, `country_id`, `state_id`, `school_id`, `scholar_degree`, `language_id`, UNIX_TIMESTAMP(graduation_date) AS `graduation_date`, UNIX_TIMESTAMP(birth_date) AS `birth_date`, UNIX_TIMESTAMP(last_access) AS `last_access`, `verified`, `verification_id`, `reset_digest`, UNIX_TIMESTAMP(reset_sent_at) AS `reset_sent_at`, `recruitment_optin` from Users";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class UsersDAOBase extends DAO
 			return self::search(new Users($Users));
 		}
 
-		$sql = "SELECT * from Users WHERE (";
+		$sql = "SELECT `user_id`, `username`, `facebook_user_id`, `password`, `main_email_id`, `name`, `solved`, `submissions`, `country_id`, `state_id`, `school_id`, `scholar_degree`, `language_id`, UNIX_TIMESTAMP(graduation_date) AS `graduation_date`, UNIX_TIMESTAMP(birth_date) AS `birth_date`, UNIX_TIMESTAMP(last_access) AS `last_access`, `verified`, `verification_id`, `reset_digest`, UNIX_TIMESTAMP(reset_sent_at) AS `reset_sent_at`, `recruitment_optin` from Users WHERE (";
 		$val = array();
 		if (!is_null( $Users->user_id)) {
 			$sql .= " `user_id` = ? AND";
@@ -247,7 +247,7 @@ abstract class UsersDAOBase extends DAO
 	  **/
 	private static final function update($Users)
 	{
-		$sql = "UPDATE Users SET  `username` = ?, `facebook_user_id` = ?, `password` = ?, `main_email_id` = ?, `name` = ?, `solved` = ?, `submissions` = ?, `country_id` = ?, `state_id` = ?, `school_id` = ?, `scholar_degree` = ?, `language_id` = ?, `graduation_date` = ?, `birth_date` = ?, `last_access` = ?, `verified` = ?, `verification_id` = ?, `reset_digest` = ?, `reset_sent_at` = ?, `recruitment_optin` = ? WHERE  `user_id` = ?;";
+		$sql = "UPDATE Users SET  `username` = ?, `facebook_user_id` = ?, `password` = ?, `main_email_id` = ?, `name` = ?, `solved` = ?, `submissions` = ?, `country_id` = ?, `state_id` = ?, `school_id` = ?, `scholar_degree` = ?, `language_id` = ?, `graduation_date` = FROM_UNIXTIME(?), `birth_date` = FROM_UNIXTIME(?), `last_access` = FROM_UNIXTIME(?), `verified` = ?, `verification_id` = ?, `reset_digest` = ?, `reset_sent_at` = FROM_UNIXTIME(?), `recruitment_optin` = ? WHERE  `user_id` = ?;";
 		$params = array(
 			$Users->username,
 			$Users->facebook_user_id,
@@ -291,9 +291,9 @@ abstract class UsersDAOBase extends DAO
 	{
 		if (is_null($Users->solved)) $Users->solved = '0';
 		if (is_null($Users->submissions)) $Users->submissions = '0';
-		if (is_null($Users->last_access)) $Users->last_access = gmdate('Y-m-d H:i:s');
+		if (is_null($Users->last_access)) $Users->last_access = time();
 		if (is_null($Users->verified)) $Users->verified = FALSE;
-		$sql = "INSERT INTO Users ( `user_id`, `username`, `facebook_user_id`, `password`, `main_email_id`, `name`, `solved`, `submissions`, `country_id`, `state_id`, `school_id`, `scholar_degree`, `language_id`, `graduation_date`, `birth_date`, `last_access`, `verified`, `verification_id`, `reset_digest`, `reset_sent_at`, `recruitment_optin` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		$sql = "INSERT INTO Users ( `user_id`, `username`, `facebook_user_id`, `password`, `main_email_id`, `name`, `solved`, `submissions`, `country_id`, `state_id`, `school_id`, `scholar_degree`, `language_id`, `graduation_date`, `birth_date`, `last_access`, `verified`, `verification_id`, `reset_digest`, `reset_sent_at`, `recruitment_optin` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?), FROM_UNIXTIME(?), ?, ?, ?, FROM_UNIXTIME(?), ?);";
 		$params = array(
 			$Users->user_id,
 			$Users->username,

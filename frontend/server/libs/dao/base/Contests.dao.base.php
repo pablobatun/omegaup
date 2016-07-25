@@ -53,7 +53,7 @@ abstract class ContestsDAOBase extends DAO
 	public static final function getByPK(  $contest_id )
 	{
 		if(  is_null( $contest_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Contests WHERE (contest_id = ? ) LIMIT 1;";
+		$sql = "SELECT `contest_id`, `title`, `description`, UNIX_TIMESTAMP(start_time) AS `start_time`, UNIX_TIMESTAMP(finish_time) AS `finish_time`, `window_length`, `director_id`, `rerun_id`, `public`, `alias`, `scoreboard`, `points_decay_factor`, `partial_score`, `submissions_gap`, `feedback`, `penalty`, `penalty_type`, `penalty_calc_policy`, `show_scoreboard_after`, `scoreboard_url`, `scoreboard_url_admin`, `urgent`, `contestant_must_register`, `languages`, `recommended` FROM Contests WHERE (contest_id = ? ) LIMIT 1;";
 		$params = array(  $contest_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class ContestsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Contests";
+		$sql = "SELECT `contest_id`, `title`, `description`, UNIX_TIMESTAMP(start_time) AS `start_time`, UNIX_TIMESTAMP(finish_time) AS `finish_time`, `window_length`, `director_id`, `rerun_id`, `public`, `alias`, `scoreboard`, `points_decay_factor`, `partial_score`, `submissions_gap`, `feedback`, `penalty`, `penalty_type`, `penalty_calc_policy`, `show_scoreboard_after`, `scoreboard_url`, `scoreboard_url_admin`, `urgent`, `contestant_must_register`, `languages`, `recommended` from Contests";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class ContestsDAOBase extends DAO
 			return self::search(new Contests($Contests));
 		}
 
-		$sql = "SELECT * from Contests WHERE (";
+		$sql = "SELECT `contest_id`, `title`, `description`, UNIX_TIMESTAMP(start_time) AS `start_time`, UNIX_TIMESTAMP(finish_time) AS `finish_time`, `window_length`, `director_id`, `rerun_id`, `public`, `alias`, `scoreboard`, `points_decay_factor`, `partial_score`, `submissions_gap`, `feedback`, `penalty`, `penalty_type`, `penalty_calc_policy`, `show_scoreboard_after`, `scoreboard_url`, `scoreboard_url_admin`, `urgent`, `contestant_must_register`, `languages`, `recommended` from Contests WHERE (";
 		$val = array();
 		if (!is_null( $Contests->contest_id)) {
 			$sql .= " `contest_id` = ? AND";
@@ -263,7 +263,7 @@ abstract class ContestsDAOBase extends DAO
 	  **/
 	private static final function update($Contests)
 	{
-		$sql = "UPDATE Contests SET  `title` = ?, `description` = ?, `start_time` = ?, `finish_time` = ?, `window_length` = ?, `director_id` = ?, `rerun_id` = ?, `public` = ?, `alias` = ?, `scoreboard` = ?, `points_decay_factor` = ?, `partial_score` = ?, `submissions_gap` = ?, `feedback` = ?, `penalty` = ?, `penalty_type` = ?, `penalty_calc_policy` = ?, `show_scoreboard_after` = ?, `scoreboard_url` = ?, `scoreboard_url_admin` = ?, `urgent` = ?, `contestant_must_register` = ?, `languages` = ?, `recommended` = ? WHERE  `contest_id` = ?;";
+		$sql = "UPDATE Contests SET  `title` = ?, `description` = ?, `start_time` = FROM_UNIXTIME(?), `finish_time` = FROM_UNIXTIME(?), `window_length` = ?, `director_id` = ?, `rerun_id` = ?, `public` = ?, `alias` = ?, `scoreboard` = ?, `points_decay_factor` = ?, `partial_score` = ?, `submissions_gap` = ?, `feedback` = ?, `penalty` = ?, `penalty_type` = ?, `penalty_calc_policy` = ?, `show_scoreboard_after` = ?, `scoreboard_url` = ?, `scoreboard_url_admin` = ?, `urgent` = ?, `contestant_must_register` = ?, `languages` = ?, `recommended` = ? WHERE  `contest_id` = ?;";
 		$params = array(
 			$Contests->title,
 			$Contests->description,
@@ -321,7 +321,7 @@ abstract class ContestsDAOBase extends DAO
 		if (is_null($Contests->urgent)) $Contests->urgent = 0;
 		if (is_null($Contests->contestant_must_register)) $Contests->contestant_must_register = '0';
 		if (is_null($Contests->recommended)) $Contests->recommended =  '0';
-		$sql = "INSERT INTO Contests ( `contest_id`, `title`, `description`, `start_time`, `finish_time`, `window_length`, `director_id`, `rerun_id`, `public`, `alias`, `scoreboard`, `points_decay_factor`, `partial_score`, `submissions_gap`, `feedback`, `penalty`, `penalty_type`, `penalty_calc_policy`, `show_scoreboard_after`, `scoreboard_url`, `scoreboard_url_admin`, `urgent`, `contestant_must_register`, `languages`, `recommended` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		$sql = "INSERT INTO Contests ( `contest_id`, `title`, `description`, `start_time`, `finish_time`, `window_length`, `director_id`, `rerun_id`, `public`, `alias`, `scoreboard`, `points_decay_factor`, `partial_score`, `submissions_gap`, `feedback`, `penalty`, `penalty_type`, `penalty_calc_policy`, `show_scoreboard_after`, `scoreboard_url`, `scoreboard_url_admin`, `urgent`, `contestant_must_register`, `languages`, `recommended` ) VALUES ( ?, ?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		$params = array(
 			$Contests->contest_id,
 			$Contests->title,

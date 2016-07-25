@@ -53,7 +53,7 @@ abstract class MessagesDAOBase extends DAO
 	public static final function getByPK(  $message_id )
 	{
 		if(  is_null( $message_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Messages WHERE (message_id = ? ) LIMIT 1;";
+		$sql = "SELECT `message_id`, `read`, `sender_id`, `recipient_id`, `message`, UNIX_TIMESTAMP(date) AS `date` FROM Messages WHERE (message_id = ? ) LIMIT 1;";
 		$params = array(  $message_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class MessagesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Messages";
+		$sql = "SELECT `message_id`, `read`, `sender_id`, `recipient_id`, `message`, UNIX_TIMESTAMP(date) AS `date` from Messages";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class MessagesDAOBase extends DAO
 			return self::search(new Messages($Messages));
 		}
 
-		$sql = "SELECT * from Messages WHERE (";
+		$sql = "SELECT `message_id`, `read`, `sender_id`, `recipient_id`, `message`, UNIX_TIMESTAMP(date) AS `date` from Messages WHERE (";
 		$val = array();
 		if (!is_null( $Messages->message_id)) {
 			$sql .= " `message_id` = ? AND";
@@ -187,7 +187,7 @@ abstract class MessagesDAOBase extends DAO
 	  **/
 	private static final function update($Messages)
 	{
-		$sql = "UPDATE Messages SET  `read` = ?, `sender_id` = ?, `recipient_id` = ?, `message` = ?, `date` = ? WHERE  `message_id` = ?;";
+		$sql = "UPDATE Messages SET  `read` = ?, `sender_id` = ?, `recipient_id` = ?, `message` = ?, `date` = FROM_UNIXTIME(?) WHERE  `message_id` = ?;";
 		$params = array(
 			$Messages->read,
 			$Messages->sender_id,
@@ -215,8 +215,8 @@ abstract class MessagesDAOBase extends DAO
 	private static final function create( $Messages )
 	{
 		if (is_null($Messages->read)) $Messages->read = '0';
-		if (is_null($Messages->date)) $Messages->date = gmdate('Y-m-d H:i:s');
-		$sql = "INSERT INTO Messages ( `message_id`, `read`, `sender_id`, `recipient_id`, `message`, `date` ) VALUES ( ?, ?, ?, ?, ?, ?);";
+		if (is_null($Messages->date)) $Messages->date = time();
+		$sql = "INSERT INTO Messages ( `message_id`, `read`, `sender_id`, `recipient_id`, `message`, `date` ) VALUES ( ?, ?, ?, ?, ?, FROM_UNIXTIME(?));";
 		$params = array(
 			$Messages->message_id,
 			$Messages->read,

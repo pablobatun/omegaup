@@ -53,7 +53,7 @@ abstract class StatesDAOBase extends DAO
 	public static final function getByPK(  $state_id )
 	{
 		if(  is_null( $state_id )  ){ return NULL; }
-		$sql = "SELECT * FROM States WHERE (state_id = ? ) LIMIT 1;";
+		$sql = "SELECT `state_id`, `country_id`, `state_code`, `name` FROM States WHERE (state_id = ? ) LIMIT 1;";
 		$params = array(  $state_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class StatesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from States";
+		$sql = "SELECT `state_id`, `country_id`, `state_code`, `name` from States";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class StatesDAOBase extends DAO
 			return self::search(new States($States));
 		}
 
-		$sql = "SELECT * from States WHERE (";
+		$sql = "SELECT `state_id`, `country_id`, `state_code`, `name` from States WHERE (";
 		$val = array();
 		if (!is_null( $States->state_id)) {
 			$sql .= " `state_id` = ? AND";

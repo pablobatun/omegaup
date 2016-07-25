@@ -53,7 +53,7 @@ abstract class SubmissionLogDAOBase extends DAO
 	public static final function getByPK(  $run_id )
 	{
 		if(  is_null( $run_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Submission_Log WHERE (run_id = ? ) LIMIT 1;";
+		$sql = "SELECT `contest_id`, `run_id`, `user_id`, `ip`, UNIX_TIMESTAMP(time) AS `time` FROM Submission_Log WHERE (run_id = ? ) LIMIT 1;";
 		$params = array(  $run_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class SubmissionLogDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Submission_Log";
+		$sql = "SELECT `contest_id`, `run_id`, `user_id`, `ip`, UNIX_TIMESTAMP(time) AS `time` from Submission_Log";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class SubmissionLogDAOBase extends DAO
 			return self::search(new SubmissionLog($Submission_Log));
 		}
 
-		$sql = "SELECT * from Submission_Log WHERE (";
+		$sql = "SELECT `contest_id`, `run_id`, `user_id`, `ip`, UNIX_TIMESTAMP(time) AS `time` from Submission_Log WHERE (";
 		$val = array();
 		if (!is_null( $Submission_Log->contest_id)) {
 			$sql .= " `contest_id` = ? AND";
@@ -183,7 +183,7 @@ abstract class SubmissionLogDAOBase extends DAO
 	  **/
 	private static final function update($Submission_Log)
 	{
-		$sql = "UPDATE Submission_Log SET  `contest_id` = ?, `user_id` = ?, `ip` = ?, `time` = ? WHERE  `run_id` = ?;";
+		$sql = "UPDATE Submission_Log SET  `contest_id` = ?, `user_id` = ?, `ip` = ?, `time` = FROM_UNIXTIME(?) WHERE  `run_id` = ?;";
 		$params = array(
 			$Submission_Log->contest_id,
 			$Submission_Log->user_id,
@@ -209,8 +209,8 @@ abstract class SubmissionLogDAOBase extends DAO
 	  **/
 	private static final function create( $Submission_Log )
 	{
-		if (is_null($Submission_Log->time)) $Submission_Log->time = gmdate('Y-m-d H:i:s');
-		$sql = "INSERT INTO Submission_Log ( `contest_id`, `run_id`, `user_id`, `ip`, `time` ) VALUES ( ?, ?, ?, ?, ?);";
+		if (is_null($Submission_Log->time)) $Submission_Log->time = time();
+		$sql = "INSERT INTO Submission_Log ( `contest_id`, `run_id`, `user_id`, `ip`, `time` ) VALUES ( ?, ?, ?, ?, FROM_UNIXTIME(?));";
 		$params = array(
 			$Submission_Log->contest_id,
 			$Submission_Log->run_id,

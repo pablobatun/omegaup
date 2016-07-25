@@ -53,7 +53,7 @@ abstract class PermissionsDAOBase extends DAO
 	public static final function getByPK(  $permission_id )
 	{
 		if(  is_null( $permission_id )  ){ return NULL; }
-		$sql = "SELECT * FROM Permissions WHERE (permission_id = ? ) LIMIT 1;";
+		$sql = "SELECT `permission_id`, `name`, `description` FROM Permissions WHERE (permission_id = ? ) LIMIT 1;";
 		$params = array(  $permission_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +79,7 @@ abstract class PermissionsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT * from Permissions";
+		$sql = "SELECT `permission_id`, `name`, `description` from Permissions";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +126,7 @@ abstract class PermissionsDAOBase extends DAO
 			return self::search(new Permissions($Permissions));
 		}
 
-		$sql = "SELECT * from Permissions WHERE (";
+		$sql = "SELECT `permission_id`, `name`, `description` from Permissions WHERE (";
 		$val = array();
 		if (!is_null( $Permissions->permission_id)) {
 			$sql .= " `permission_id` = ? AND";
