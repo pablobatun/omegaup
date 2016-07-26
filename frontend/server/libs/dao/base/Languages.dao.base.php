@@ -19,6 +19,11 @@
 abstract class LanguagesDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Languages`.`language_id`, `Languages`.`name`, `Languages`.`country_id`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Languages} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class LanguagesDAOBase extends DAO
 	public static final function getByPK(  $language_id )
 	{
 		if(  is_null( $language_id )  ){ return NULL; }
-		$sql = "SELECT `language_id`, `name`, `country_id` FROM Languages WHERE (language_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Languages`.`language_id`, `Languages`.`name`, `Languages`.`country_id` FROM Languages WHERE (language_id = ? ) LIMIT 1;";
 		$params = array(  $language_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class LanguagesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `language_id`, `name`, `country_id` from Languages";
+		$sql = "SELECT `Languages`.`language_id`, `Languages`.`name`, `Languages`.`country_id` from Languages";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class LanguagesDAOBase extends DAO
 			return self::search(new Languages($Languages));
 		}
 
-		$sql = "SELECT `language_id`, `name`, `country_id` from Languages WHERE (";
+		$sql = "SELECT `Languages`.`language_id`, `Languages`.`name`, `Languages`.`country_id` from Languages WHERE (";
 		$val = array();
 		if (!is_null( $Languages->language_id)) {
 			$sql .= " `language_id` = ? AND";

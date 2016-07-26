@@ -19,6 +19,11 @@
 abstract class AuthTokensDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Auth_Tokens`.`user_id`, `Auth_Tokens`.`token`, UNIX_TIMESTAMP(`Auth_Tokens`.`create_time`) AS `create_time`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link AuthTokens} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class AuthTokensDAOBase extends DAO
 	public static final function getByPK(  $token )
 	{
 		if(  is_null( $token )  ){ return NULL; }
-		$sql = "SELECT `user_id`, `token`, UNIX_TIMESTAMP(create_time) AS `create_time` FROM Auth_Tokens WHERE (token = ? ) LIMIT 1;";
+		$sql = "SELECT `Auth_Tokens`.`user_id`, `Auth_Tokens`.`token`, UNIX_TIMESTAMP(`Auth_Tokens`.`create_time`) AS `create_time` FROM Auth_Tokens WHERE (token = ? ) LIMIT 1;";
 		$params = array(  $token );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class AuthTokensDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `user_id`, `token`, UNIX_TIMESTAMP(create_time) AS `create_time` from Auth_Tokens";
+		$sql = "SELECT `Auth_Tokens`.`user_id`, `Auth_Tokens`.`token`, UNIX_TIMESTAMP(`Auth_Tokens`.`create_time`) AS `create_time` from Auth_Tokens";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class AuthTokensDAOBase extends DAO
 			return self::search(new AuthTokens($Auth_Tokens));
 		}
 
-		$sql = "SELECT `user_id`, `token`, UNIX_TIMESTAMP(create_time) AS `create_time` from Auth_Tokens WHERE (";
+		$sql = "SELECT `Auth_Tokens`.`user_id`, `Auth_Tokens`.`token`, UNIX_TIMESTAMP(`Auth_Tokens`.`create_time`) AS `create_time` from Auth_Tokens WHERE (";
 		$val = array();
 		if (!is_null( $Auth_Tokens->user_id)) {
 			$sql .= " `user_id` = ? AND";

@@ -19,6 +19,11 @@
 abstract class InterviewsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Interviews`.`contest_id`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Interviews} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class InterviewsDAOBase extends DAO
 	public static final function getByPK(  $contest_id )
 	{
 		if(  is_null( $contest_id )  ){ return NULL; }
-		$sql = "SELECT `contest_id` FROM Interviews WHERE (contest_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Interviews`.`contest_id` FROM Interviews WHERE (contest_id = ? ) LIMIT 1;";
 		$params = array(  $contest_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class InterviewsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `contest_id` from Interviews";
+		$sql = "SELECT `Interviews`.`contest_id` from Interviews";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class InterviewsDAOBase extends DAO
 			return self::search(new Interviews($Interviews));
 		}
 
-		$sql = "SELECT `contest_id` from Interviews WHERE (";
+		$sql = "SELECT `Interviews`.`contest_id` from Interviews WHERE (";
 		$val = array();
 		if (!is_null( $Interviews->contest_id)) {
 			$sql .= " `contest_id` = ? AND";

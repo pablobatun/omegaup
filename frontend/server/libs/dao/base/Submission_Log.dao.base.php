@@ -19,6 +19,11 @@
 abstract class SubmissionLogDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Submission_Log`.`contest_id`, `Submission_Log`.`run_id`, `Submission_Log`.`user_id`, `Submission_Log`.`ip`, UNIX_TIMESTAMP(`Submission_Log`.`time`) AS `time`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link SubmissionLog} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class SubmissionLogDAOBase extends DAO
 	public static final function getByPK(  $run_id )
 	{
 		if(  is_null( $run_id )  ){ return NULL; }
-		$sql = "SELECT `contest_id`, `run_id`, `user_id`, `ip`, UNIX_TIMESTAMP(time) AS `time` FROM Submission_Log WHERE (run_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Submission_Log`.`contest_id`, `Submission_Log`.`run_id`, `Submission_Log`.`user_id`, `Submission_Log`.`ip`, UNIX_TIMESTAMP(`Submission_Log`.`time`) AS `time` FROM Submission_Log WHERE (run_id = ? ) LIMIT 1;";
 		$params = array(  $run_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class SubmissionLogDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `contest_id`, `run_id`, `user_id`, `ip`, UNIX_TIMESTAMP(time) AS `time` from Submission_Log";
+		$sql = "SELECT `Submission_Log`.`contest_id`, `Submission_Log`.`run_id`, `Submission_Log`.`user_id`, `Submission_Log`.`ip`, UNIX_TIMESTAMP(`Submission_Log`.`time`) AS `time` from Submission_Log";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class SubmissionLogDAOBase extends DAO
 			return self::search(new SubmissionLog($Submission_Log));
 		}
 
-		$sql = "SELECT `contest_id`, `run_id`, `user_id`, `ip`, UNIX_TIMESTAMP(time) AS `time` from Submission_Log WHERE (";
+		$sql = "SELECT `Submission_Log`.`contest_id`, `Submission_Log`.`run_id`, `Submission_Log`.`user_id`, `Submission_Log`.`ip`, UNIX_TIMESTAMP(`Submission_Log`.`time`) AS `time` from Submission_Log WHERE (";
 		$val = array();
 		if (!is_null( $Submission_Log->contest_id)) {
 			$sql .= " `contest_id` = ? AND";

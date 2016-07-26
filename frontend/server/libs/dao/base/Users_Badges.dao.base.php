@@ -19,6 +19,11 @@
 abstract class UsersBadgesDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Users_Badges`.`badge_id`, `Users_Badges`.`user_id`, UNIX_TIMESTAMP(`Users_Badges`.`time`) AS `time`, `Users_Badges`.`last_problem_id`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link UsersBadges} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class UsersBadgesDAOBase extends DAO
 	public static final function getByPK(  $badge_id, $user_id )
 	{
 		if(  is_null( $badge_id ) || is_null( $user_id )  ){ return NULL; }
-		$sql = "SELECT `badge_id`, `user_id`, UNIX_TIMESTAMP(time) AS `time`, `last_problem_id` FROM Users_Badges WHERE (badge_id = ? AND user_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Users_Badges`.`badge_id`, `Users_Badges`.`user_id`, UNIX_TIMESTAMP(`Users_Badges`.`time`) AS `time`, `Users_Badges`.`last_problem_id` FROM Users_Badges WHERE (badge_id = ? AND user_id = ? ) LIMIT 1;";
 		$params = array(  $badge_id, $user_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class UsersBadgesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `badge_id`, `user_id`, UNIX_TIMESTAMP(time) AS `time`, `last_problem_id` from Users_Badges";
+		$sql = "SELECT `Users_Badges`.`badge_id`, `Users_Badges`.`user_id`, UNIX_TIMESTAMP(`Users_Badges`.`time`) AS `time`, `Users_Badges`.`last_problem_id` from Users_Badges";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class UsersBadgesDAOBase extends DAO
 			return self::search(new UsersBadges($Users_Badges));
 		}
 
-		$sql = "SELECT `badge_id`, `user_id`, UNIX_TIMESTAMP(time) AS `time`, `last_problem_id` from Users_Badges WHERE (";
+		$sql = "SELECT `Users_Badges`.`badge_id`, `Users_Badges`.`user_id`, UNIX_TIMESTAMP(`Users_Badges`.`time`) AS `time`, `Users_Badges`.`last_problem_id` from Users_Badges WHERE (";
 		$val = array();
 		if (!is_null( $Users_Badges->badge_id)) {
 			$sql .= " `badge_id` = ? AND";

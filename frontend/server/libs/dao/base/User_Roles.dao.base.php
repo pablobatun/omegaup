@@ -19,6 +19,11 @@
 abstract class UserRolesDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`User_Roles`.`user_id`, `User_Roles`.`role_id`, `User_Roles`.`contest_id`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link UserRoles} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class UserRolesDAOBase extends DAO
 	public static final function getByPK(  $user_id, $role_id, $contest_id )
 	{
 		if(  is_null( $user_id ) || is_null( $role_id ) || is_null( $contest_id )  ){ return NULL; }
-		$sql = "SELECT `user_id`, `role_id`, `contest_id` FROM User_Roles WHERE (user_id = ? AND role_id = ? AND contest_id = ? ) LIMIT 1;";
+		$sql = "SELECT `User_Roles`.`user_id`, `User_Roles`.`role_id`, `User_Roles`.`contest_id` FROM User_Roles WHERE (user_id = ? AND role_id = ? AND contest_id = ? ) LIMIT 1;";
 		$params = array(  $user_id, $role_id, $contest_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class UserRolesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `user_id`, `role_id`, `contest_id` from User_Roles";
+		$sql = "SELECT `User_Roles`.`user_id`, `User_Roles`.`role_id`, `User_Roles`.`contest_id` from User_Roles";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class UserRolesDAOBase extends DAO
 			return self::search(new UserRoles($User_Roles));
 		}
 
-		$sql = "SELECT `user_id`, `role_id`, `contest_id` from User_Roles WHERE (";
+		$sql = "SELECT `User_Roles`.`user_id`, `User_Roles`.`role_id`, `User_Roles`.`contest_id` from User_Roles WHERE (";
 		$val = array();
 		if (!is_null( $User_Roles->user_id)) {
 			$sql .= " `user_id` = ? AND";

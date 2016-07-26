@@ -19,6 +19,11 @@
 abstract class RolesDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Roles`.`role_id`, `Roles`.`name`, `Roles`.`description`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Roles} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class RolesDAOBase extends DAO
 	public static final function getByPK(  $role_id )
 	{
 		if(  is_null( $role_id )  ){ return NULL; }
-		$sql = "SELECT `role_id`, `name`, `description` FROM Roles WHERE (role_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Roles`.`role_id`, `Roles`.`name`, `Roles`.`description` FROM Roles WHERE (role_id = ? ) LIMIT 1;";
 		$params = array(  $role_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class RolesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `role_id`, `name`, `description` from Roles";
+		$sql = "SELECT `Roles`.`role_id`, `Roles`.`name`, `Roles`.`description` from Roles";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class RolesDAOBase extends DAO
 			return self::search(new Roles($Roles));
 		}
 
-		$sql = "SELECT `role_id`, `name`, `description` from Roles WHERE (";
+		$sql = "SELECT `Roles`.`role_id`, `Roles`.`name`, `Roles`.`description` from Roles WHERE (";
 		$val = array();
 		if (!is_null( $Roles->role_id)) {
 			$sql .= " `role_id` = ? AND";

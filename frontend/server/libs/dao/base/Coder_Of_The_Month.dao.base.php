@@ -19,6 +19,11 @@
 abstract class CoderOfTheMonthDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Coder_Of_The_Month`.`coder_of_the_month_id`, `Coder_Of_The_Month`.`user_id`, `Coder_Of_The_Month`.`description`, UNIX_TIMESTAMP(`Coder_Of_The_Month`.`time`) AS `time`, `Coder_Of_The_Month`.`interview_url`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link CoderOfTheMonth} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class CoderOfTheMonthDAOBase extends DAO
 	public static final function getByPK(  $coder_of_the_month_id )
 	{
 		if(  is_null( $coder_of_the_month_id )  ){ return NULL; }
-		$sql = "SELECT `coder_of_the_month_id`, `user_id`, `description`, UNIX_TIMESTAMP(time) AS `time`, `interview_url` FROM Coder_Of_The_Month WHERE (coder_of_the_month_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Coder_Of_The_Month`.`coder_of_the_month_id`, `Coder_Of_The_Month`.`user_id`, `Coder_Of_The_Month`.`description`, UNIX_TIMESTAMP(`Coder_Of_The_Month`.`time`) AS `time`, `Coder_Of_The_Month`.`interview_url` FROM Coder_Of_The_Month WHERE (coder_of_the_month_id = ? ) LIMIT 1;";
 		$params = array(  $coder_of_the_month_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class CoderOfTheMonthDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `coder_of_the_month_id`, `user_id`, `description`, UNIX_TIMESTAMP(time) AS `time`, `interview_url` from Coder_Of_The_Month";
+		$sql = "SELECT `Coder_Of_The_Month`.`coder_of_the_month_id`, `Coder_Of_The_Month`.`user_id`, `Coder_Of_The_Month`.`description`, UNIX_TIMESTAMP(`Coder_Of_The_Month`.`time`) AS `time`, `Coder_Of_The_Month`.`interview_url` from Coder_Of_The_Month";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class CoderOfTheMonthDAOBase extends DAO
 			return self::search(new CoderOfTheMonth($Coder_Of_The_Month));
 		}
 
-		$sql = "SELECT `coder_of_the_month_id`, `user_id`, `description`, UNIX_TIMESTAMP(time) AS `time`, `interview_url` from Coder_Of_The_Month WHERE (";
+		$sql = "SELECT `Coder_Of_The_Month`.`coder_of_the_month_id`, `Coder_Of_The_Month`.`user_id`, `Coder_Of_The_Month`.`description`, UNIX_TIMESTAMP(`Coder_Of_The_Month`.`time`) AS `time`, `Coder_Of_The_Month`.`interview_url` from Coder_Of_The_Month WHERE (";
 		$val = array();
 		if (!is_null( $Coder_Of_The_Month->coder_of_the_month_id)) {
 			$sql .= " `coder_of_the_month_id` = ? AND";

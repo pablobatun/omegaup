@@ -19,6 +19,11 @@
 abstract class TagsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Tags`.`tag_id`, `Tags`.`name`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Tags} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class TagsDAOBase extends DAO
 	public static final function getByPK(  $tag_id )
 	{
 		if(  is_null( $tag_id )  ){ return NULL; }
-		$sql = "SELECT `tag_id`, `name` FROM Tags WHERE (tag_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Tags`.`tag_id`, `Tags`.`name` FROM Tags WHERE (tag_id = ? ) LIMIT 1;";
 		$params = array(  $tag_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class TagsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `tag_id`, `name` from Tags";
+		$sql = "SELECT `Tags`.`tag_id`, `Tags`.`name` from Tags";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class TagsDAOBase extends DAO
 			return self::search(new Tags($Tags));
 		}
 
-		$sql = "SELECT `tag_id`, `name` from Tags WHERE (";
+		$sql = "SELECT `Tags`.`tag_id`, `Tags`.`name` from Tags WHERE (";
 		$val = array();
 		if (!is_null( $Tags->tag_id)) {
 			$sql .= " `tag_id` = ? AND";

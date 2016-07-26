@@ -19,6 +19,11 @@
 abstract class GroupsScoreboardsContestsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Groups_Scoreboards_Contests`.`group_scoreboard_id`, `Groups_Scoreboards_Contests`.`contest_id`, `Groups_Scoreboards_Contests`.`only_ac`, `Groups_Scoreboards_Contests`.`weight`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link GroupsScoreboardsContests} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class GroupsScoreboardsContestsDAOBase extends DAO
 	public static final function getByPK(  $group_scoreboard_id, $contest_id )
 	{
 		if(  is_null( $group_scoreboard_id ) || is_null( $contest_id )  ){ return NULL; }
-		$sql = "SELECT `group_scoreboard_id`, `contest_id`, `only_ac`, `weight` FROM Groups_Scoreboards_Contests WHERE (group_scoreboard_id = ? AND contest_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Groups_Scoreboards_Contests`.`group_scoreboard_id`, `Groups_Scoreboards_Contests`.`contest_id`, `Groups_Scoreboards_Contests`.`only_ac`, `Groups_Scoreboards_Contests`.`weight` FROM Groups_Scoreboards_Contests WHERE (group_scoreboard_id = ? AND contest_id = ? ) LIMIT 1;";
 		$params = array(  $group_scoreboard_id, $contest_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class GroupsScoreboardsContestsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `group_scoreboard_id`, `contest_id`, `only_ac`, `weight` from Groups_Scoreboards_Contests";
+		$sql = "SELECT `Groups_Scoreboards_Contests`.`group_scoreboard_id`, `Groups_Scoreboards_Contests`.`contest_id`, `Groups_Scoreboards_Contests`.`only_ac`, `Groups_Scoreboards_Contests`.`weight` from Groups_Scoreboards_Contests";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class GroupsScoreboardsContestsDAOBase extends DAO
 			return self::search(new GroupsScoreboardsContests($Groups_Scoreboards_Contests));
 		}
 
-		$sql = "SELECT `group_scoreboard_id`, `contest_id`, `only_ac`, `weight` from Groups_Scoreboards_Contests WHERE (";
+		$sql = "SELECT `Groups_Scoreboards_Contests`.`group_scoreboard_id`, `Groups_Scoreboards_Contests`.`contest_id`, `Groups_Scoreboards_Contests`.`only_ac`, `Groups_Scoreboards_Contests`.`weight` from Groups_Scoreboards_Contests WHERE (";
 		$val = array();
 		if (!is_null( $Groups_Scoreboards_Contests->group_scoreboard_id)) {
 			$sql .= " `group_scoreboard_id` = ? AND";

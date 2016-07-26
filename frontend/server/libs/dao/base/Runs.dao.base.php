@@ -19,6 +19,11 @@
 abstract class RunsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Runs`.`run_id`, `Runs`.`user_id`, `Runs`.`problem_id`, `Runs`.`contest_id`, `Runs`.`guid`, `Runs`.`language`, `Runs`.`status`, `Runs`.`verdict`, `Runs`.`runtime`, `Runs`.`penalty`, `Runs`.`memory`, `Runs`.`score`, `Runs`.`contest_score`, UNIX_TIMESTAMP(`Runs`.`time`) AS `time`, `Runs`.`submit_delay`, `Runs`.`test`, `Runs`.`judged_by`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Runs} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class RunsDAOBase extends DAO
 	public static final function getByPK(  $run_id )
 	{
 		if(  is_null( $run_id )  ){ return NULL; }
-		$sql = "SELECT `run_id`, `user_id`, `problem_id`, `contest_id`, `guid`, `language`, `status`, `verdict`, `runtime`, `penalty`, `memory`, `score`, `contest_score`, UNIX_TIMESTAMP(time) AS `time`, `submit_delay`, `test`, `judged_by` FROM Runs WHERE (run_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Runs`.`run_id`, `Runs`.`user_id`, `Runs`.`problem_id`, `Runs`.`contest_id`, `Runs`.`guid`, `Runs`.`language`, `Runs`.`status`, `Runs`.`verdict`, `Runs`.`runtime`, `Runs`.`penalty`, `Runs`.`memory`, `Runs`.`score`, `Runs`.`contest_score`, UNIX_TIMESTAMP(`Runs`.`time`) AS `time`, `Runs`.`submit_delay`, `Runs`.`test`, `Runs`.`judged_by` FROM Runs WHERE (run_id = ? ) LIMIT 1;";
 		$params = array(  $run_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class RunsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `run_id`, `user_id`, `problem_id`, `contest_id`, `guid`, `language`, `status`, `verdict`, `runtime`, `penalty`, `memory`, `score`, `contest_score`, UNIX_TIMESTAMP(time) AS `time`, `submit_delay`, `test`, `judged_by` from Runs";
+		$sql = "SELECT `Runs`.`run_id`, `Runs`.`user_id`, `Runs`.`problem_id`, `Runs`.`contest_id`, `Runs`.`guid`, `Runs`.`language`, `Runs`.`status`, `Runs`.`verdict`, `Runs`.`runtime`, `Runs`.`penalty`, `Runs`.`memory`, `Runs`.`score`, `Runs`.`contest_score`, UNIX_TIMESTAMP(`Runs`.`time`) AS `time`, `Runs`.`submit_delay`, `Runs`.`test`, `Runs`.`judged_by` from Runs";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class RunsDAOBase extends DAO
 			return self::search(new Runs($Runs));
 		}
 
-		$sql = "SELECT `run_id`, `user_id`, `problem_id`, `contest_id`, `guid`, `language`, `status`, `verdict`, `runtime`, `penalty`, `memory`, `score`, `contest_score`, UNIX_TIMESTAMP(time) AS `time`, `submit_delay`, `test`, `judged_by` from Runs WHERE (";
+		$sql = "SELECT `Runs`.`run_id`, `Runs`.`user_id`, `Runs`.`problem_id`, `Runs`.`contest_id`, `Runs`.`guid`, `Runs`.`language`, `Runs`.`status`, `Runs`.`verdict`, `Runs`.`runtime`, `Runs`.`penalty`, `Runs`.`memory`, `Runs`.`score`, `Runs`.`contest_score`, UNIX_TIMESTAMP(`Runs`.`time`) AS `time`, `Runs`.`submit_delay`, `Runs`.`test`, `Runs`.`judged_by` from Runs WHERE (";
 		$val = array();
 		if (!is_null( $Runs->run_id)) {
 			$sql .= " `run_id` = ? AND";

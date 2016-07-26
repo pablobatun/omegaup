@@ -21,7 +21,7 @@ class AuthTokensDAO extends AuthTokensDAOBase {
         //look for it on the database
         global $conn;
 
-        $sql = 'select u.* from Users u, Auth_Tokens at where at.user_id = u.user_id and at.token = ?;';
+        $sql = 'SELECT ' . AuthTokensDAOBase::FIELDS . ' FROM Users, Auth_Tokens where Auth_Tokens.user_id = Users.user_id and Auth_Tokens.token = ?;';
 
         $params = array($auth_token);
 

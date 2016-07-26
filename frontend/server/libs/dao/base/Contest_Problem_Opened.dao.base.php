@@ -19,6 +19,11 @@
 abstract class ContestProblemOpenedDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Contest_Problem_Opened`.`contest_id`, `Contest_Problem_Opened`.`problem_id`, `Contest_Problem_Opened`.`user_id`, UNIX_TIMESTAMP(`Contest_Problem_Opened`.`open_time`) AS `open_time`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link ContestProblemOpened} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class ContestProblemOpenedDAOBase extends DAO
 	public static final function getByPK(  $contest_id, $problem_id, $user_id )
 	{
 		if(  is_null( $contest_id ) || is_null( $problem_id ) || is_null( $user_id )  ){ return NULL; }
-		$sql = "SELECT `contest_id`, `problem_id`, `user_id`, UNIX_TIMESTAMP(open_time) AS `open_time` FROM Contest_Problem_Opened WHERE (contest_id = ? AND problem_id = ? AND user_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Contest_Problem_Opened`.`contest_id`, `Contest_Problem_Opened`.`problem_id`, `Contest_Problem_Opened`.`user_id`, UNIX_TIMESTAMP(`Contest_Problem_Opened`.`open_time`) AS `open_time` FROM Contest_Problem_Opened WHERE (contest_id = ? AND problem_id = ? AND user_id = ? ) LIMIT 1;";
 		$params = array(  $contest_id, $problem_id, $user_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class ContestProblemOpenedDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `contest_id`, `problem_id`, `user_id`, UNIX_TIMESTAMP(open_time) AS `open_time` from Contest_Problem_Opened";
+		$sql = "SELECT `Contest_Problem_Opened`.`contest_id`, `Contest_Problem_Opened`.`problem_id`, `Contest_Problem_Opened`.`user_id`, UNIX_TIMESTAMP(`Contest_Problem_Opened`.`open_time`) AS `open_time` from Contest_Problem_Opened";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class ContestProblemOpenedDAOBase extends DAO
 			return self::search(new ContestProblemOpened($Contest_Problem_Opened));
 		}
 
-		$sql = "SELECT `contest_id`, `problem_id`, `user_id`, UNIX_TIMESTAMP(open_time) AS `open_time` from Contest_Problem_Opened WHERE (";
+		$sql = "SELECT `Contest_Problem_Opened`.`contest_id`, `Contest_Problem_Opened`.`problem_id`, `Contest_Problem_Opened`.`user_id`, UNIX_TIMESTAMP(`Contest_Problem_Opened`.`open_time`) AS `open_time` from Contest_Problem_Opened WHERE (";
 		$val = array();
 		if (!is_null( $Contest_Problem_Opened->contest_id)) {
 			$sql .= " `contest_id` = ? AND";

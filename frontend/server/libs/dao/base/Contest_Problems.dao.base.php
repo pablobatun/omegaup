@@ -19,6 +19,11 @@
 abstract class ContestProblemsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Contest_Problems`.`contest_id`, `Contest_Problems`.`problem_id`, `Contest_Problems`.`points`, `Contest_Problems`.`order`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link ContestProblems} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class ContestProblemsDAOBase extends DAO
 	public static final function getByPK(  $contest_id, $problem_id )
 	{
 		if(  is_null( $contest_id ) || is_null( $problem_id )  ){ return NULL; }
-		$sql = "SELECT `contest_id`, `problem_id`, `points`, `order` FROM Contest_Problems WHERE (contest_id = ? AND problem_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Contest_Problems`.`contest_id`, `Contest_Problems`.`problem_id`, `Contest_Problems`.`points`, `Contest_Problems`.`order` FROM Contest_Problems WHERE (contest_id = ? AND problem_id = ? ) LIMIT 1;";
 		$params = array(  $contest_id, $problem_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class ContestProblemsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `contest_id`, `problem_id`, `points`, `order` from Contest_Problems";
+		$sql = "SELECT `Contest_Problems`.`contest_id`, `Contest_Problems`.`problem_id`, `Contest_Problems`.`points`, `Contest_Problems`.`order` from Contest_Problems";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class ContestProblemsDAOBase extends DAO
 			return self::search(new ContestProblems($Contest_Problems));
 		}
 
-		$sql = "SELECT `contest_id`, `problem_id`, `points`, `order` from Contest_Problems WHERE (";
+		$sql = "SELECT `Contest_Problems`.`contest_id`, `Contest_Problems`.`problem_id`, `Contest_Problems`.`points`, `Contest_Problems`.`order` from Contest_Problems WHERE (";
 		$val = array();
 		if (!is_null( $Contest_Problems->contest_id)) {
 			$sql .= " `contest_id` = ? AND";

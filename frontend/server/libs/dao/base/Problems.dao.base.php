@@ -19,6 +19,11 @@
 abstract class ProblemsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Problems`.`problem_id`, `Problems`.`public`, `Problems`.`author_id`, `Problems`.`title`, `Problems`.`alias`, `Problems`.`validator`, `Problems`.`languages`, `Problems`.`server`, `Problems`.`remote_id`, `Problems`.`time_limit`, `Problems`.`validator_time_limit`, `Problems`.`overall_wall_time_limit`, `Problems`.`extra_wall_time`, `Problems`.`memory_limit`, `Problems`.`output_limit`, `Problems`.`stack_limit`, `Problems`.`visits`, `Problems`.`submissions`, `Problems`.`accepted`, `Problems`.`difficulty`, UNIX_TIMESTAMP(`Problems`.`creation_date`) AS `creation_date`, `Problems`.`source`, `Problems`.`order`, `Problems`.`tolerance`, `Problems`.`slow`, `Problems`.`deprecated`, `Problems`.`email_clarifications`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Problems} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class ProblemsDAOBase extends DAO
 	public static final function getByPK(  $problem_id )
 	{
 		if(  is_null( $problem_id )  ){ return NULL; }
-		$sql = "SELECT `problem_id`, `public`, `author_id`, `title`, `alias`, `validator`, `languages`, `server`, `remote_id`, `time_limit`, `validator_time_limit`, `overall_wall_time_limit`, `extra_wall_time`, `memory_limit`, `output_limit`, `stack_limit`, `visits`, `submissions`, `accepted`, `difficulty`, UNIX_TIMESTAMP(creation_date) AS `creation_date`, `source`, `order`, `tolerance`, `slow`, `deprecated`, `email_clarifications` FROM Problems WHERE (problem_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Problems`.`problem_id`, `Problems`.`public`, `Problems`.`author_id`, `Problems`.`title`, `Problems`.`alias`, `Problems`.`validator`, `Problems`.`languages`, `Problems`.`server`, `Problems`.`remote_id`, `Problems`.`time_limit`, `Problems`.`validator_time_limit`, `Problems`.`overall_wall_time_limit`, `Problems`.`extra_wall_time`, `Problems`.`memory_limit`, `Problems`.`output_limit`, `Problems`.`stack_limit`, `Problems`.`visits`, `Problems`.`submissions`, `Problems`.`accepted`, `Problems`.`difficulty`, UNIX_TIMESTAMP(`Problems`.`creation_date`) AS `creation_date`, `Problems`.`source`, `Problems`.`order`, `Problems`.`tolerance`, `Problems`.`slow`, `Problems`.`deprecated`, `Problems`.`email_clarifications` FROM Problems WHERE (problem_id = ? ) LIMIT 1;";
 		$params = array(  $problem_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class ProblemsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `problem_id`, `public`, `author_id`, `title`, `alias`, `validator`, `languages`, `server`, `remote_id`, `time_limit`, `validator_time_limit`, `overall_wall_time_limit`, `extra_wall_time`, `memory_limit`, `output_limit`, `stack_limit`, `visits`, `submissions`, `accepted`, `difficulty`, UNIX_TIMESTAMP(creation_date) AS `creation_date`, `source`, `order`, `tolerance`, `slow`, `deprecated`, `email_clarifications` from Problems";
+		$sql = "SELECT `Problems`.`problem_id`, `Problems`.`public`, `Problems`.`author_id`, `Problems`.`title`, `Problems`.`alias`, `Problems`.`validator`, `Problems`.`languages`, `Problems`.`server`, `Problems`.`remote_id`, `Problems`.`time_limit`, `Problems`.`validator_time_limit`, `Problems`.`overall_wall_time_limit`, `Problems`.`extra_wall_time`, `Problems`.`memory_limit`, `Problems`.`output_limit`, `Problems`.`stack_limit`, `Problems`.`visits`, `Problems`.`submissions`, `Problems`.`accepted`, `Problems`.`difficulty`, UNIX_TIMESTAMP(`Problems`.`creation_date`) AS `creation_date`, `Problems`.`source`, `Problems`.`order`, `Problems`.`tolerance`, `Problems`.`slow`, `Problems`.`deprecated`, `Problems`.`email_clarifications` from Problems";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class ProblemsDAOBase extends DAO
 			return self::search(new Problems($Problems));
 		}
 
-		$sql = "SELECT `problem_id`, `public`, `author_id`, `title`, `alias`, `validator`, `languages`, `server`, `remote_id`, `time_limit`, `validator_time_limit`, `overall_wall_time_limit`, `extra_wall_time`, `memory_limit`, `output_limit`, `stack_limit`, `visits`, `submissions`, `accepted`, `difficulty`, UNIX_TIMESTAMP(creation_date) AS `creation_date`, `source`, `order`, `tolerance`, `slow`, `deprecated`, `email_clarifications` from Problems WHERE (";
+		$sql = "SELECT `Problems`.`problem_id`, `Problems`.`public`, `Problems`.`author_id`, `Problems`.`title`, `Problems`.`alias`, `Problems`.`validator`, `Problems`.`languages`, `Problems`.`server`, `Problems`.`remote_id`, `Problems`.`time_limit`, `Problems`.`validator_time_limit`, `Problems`.`overall_wall_time_limit`, `Problems`.`extra_wall_time`, `Problems`.`memory_limit`, `Problems`.`output_limit`, `Problems`.`stack_limit`, `Problems`.`visits`, `Problems`.`submissions`, `Problems`.`accepted`, `Problems`.`difficulty`, UNIX_TIMESTAMP(`Problems`.`creation_date`) AS `creation_date`, `Problems`.`source`, `Problems`.`order`, `Problems`.`tolerance`, `Problems`.`slow`, `Problems`.`deprecated`, `Problems`.`email_clarifications` from Problems WHERE (";
 		$val = array();
 		if (!is_null( $Problems->problem_id)) {
 			$sql .= " `problem_id` = ? AND";

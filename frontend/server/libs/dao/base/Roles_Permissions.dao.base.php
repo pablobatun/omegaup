@@ -19,6 +19,11 @@
 abstract class RolesPermissionsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Roles_Permissions`.`role_id`, `Roles_Permissions`.`permission_id`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link RolesPermissions} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class RolesPermissionsDAOBase extends DAO
 	public static final function getByPK(  $role_id, $permission_id )
 	{
 		if(  is_null( $role_id ) || is_null( $permission_id )  ){ return NULL; }
-		$sql = "SELECT `role_id`, `permission_id` FROM Roles_Permissions WHERE (role_id = ? AND permission_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Roles_Permissions`.`role_id`, `Roles_Permissions`.`permission_id` FROM Roles_Permissions WHERE (role_id = ? AND permission_id = ? ) LIMIT 1;";
 		$params = array(  $role_id, $permission_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class RolesPermissionsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `role_id`, `permission_id` from Roles_Permissions";
+		$sql = "SELECT `Roles_Permissions`.`role_id`, `Roles_Permissions`.`permission_id` from Roles_Permissions";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class RolesPermissionsDAOBase extends DAO
 			return self::search(new RolesPermissions($Roles_Permissions));
 		}
 
-		$sql = "SELECT `role_id`, `permission_id` from Roles_Permissions WHERE (";
+		$sql = "SELECT `Roles_Permissions`.`role_id`, `Roles_Permissions`.`permission_id` from Roles_Permissions WHERE (";
 		$val = array();
 		if (!is_null( $Roles_Permissions->role_id)) {
 			$sql .= " `role_id` = ? AND";

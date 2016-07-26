@@ -19,6 +19,11 @@
 abstract class ProblemsTagsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Problems_Tags`.`problem_id`, `Problems_Tags`.`tag_id`, `Problems_Tags`.`public`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link ProblemsTags} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class ProblemsTagsDAOBase extends DAO
 	public static final function getByPK(  $problem_id, $tag_id )
 	{
 		if(  is_null( $problem_id ) || is_null( $tag_id )  ){ return NULL; }
-		$sql = "SELECT `problem_id`, `tag_id`, `public` FROM Problems_Tags WHERE (problem_id = ? AND tag_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Problems_Tags`.`problem_id`, `Problems_Tags`.`tag_id`, `Problems_Tags`.`public` FROM Problems_Tags WHERE (problem_id = ? AND tag_id = ? ) LIMIT 1;";
 		$params = array(  $problem_id, $tag_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class ProblemsTagsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `problem_id`, `tag_id`, `public` from Problems_Tags";
+		$sql = "SELECT `Problems_Tags`.`problem_id`, `Problems_Tags`.`tag_id`, `Problems_Tags`.`public` from Problems_Tags";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class ProblemsTagsDAOBase extends DAO
 			return self::search(new ProblemsTags($Problems_Tags));
 		}
 
-		$sql = "SELECT `problem_id`, `tag_id`, `public` from Problems_Tags WHERE (";
+		$sql = "SELECT `Problems_Tags`.`problem_id`, `Problems_Tags`.`tag_id`, `Problems_Tags`.`public` from Problems_Tags WHERE (";
 		$val = array();
 		if (!is_null( $Problems_Tags->problem_id)) {
 			$sql .= " `problem_id` = ? AND";

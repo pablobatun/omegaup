@@ -19,6 +19,11 @@
 abstract class ClarificationsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Clarifications`.`clarification_id`, `Clarifications`.`author_id`, `Clarifications`.`message`, `Clarifications`.`answer`, UNIX_TIMESTAMP(`Clarifications`.`time`) AS `time`, `Clarifications`.`problem_id`, `Clarifications`.`contest_id`, `Clarifications`.`public`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Clarifications} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class ClarificationsDAOBase extends DAO
 	public static final function getByPK(  $clarification_id )
 	{
 		if(  is_null( $clarification_id )  ){ return NULL; }
-		$sql = "SELECT `clarification_id`, `author_id`, `message`, `answer`, UNIX_TIMESTAMP(time) AS `time`, `problem_id`, `contest_id`, `public` FROM Clarifications WHERE (clarification_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Clarifications`.`clarification_id`, `Clarifications`.`author_id`, `Clarifications`.`message`, `Clarifications`.`answer`, UNIX_TIMESTAMP(`Clarifications`.`time`) AS `time`, `Clarifications`.`problem_id`, `Clarifications`.`contest_id`, `Clarifications`.`public` FROM Clarifications WHERE (clarification_id = ? ) LIMIT 1;";
 		$params = array(  $clarification_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class ClarificationsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `clarification_id`, `author_id`, `message`, `answer`, UNIX_TIMESTAMP(time) AS `time`, `problem_id`, `contest_id`, `public` from Clarifications";
+		$sql = "SELECT `Clarifications`.`clarification_id`, `Clarifications`.`author_id`, `Clarifications`.`message`, `Clarifications`.`answer`, UNIX_TIMESTAMP(`Clarifications`.`time`) AS `time`, `Clarifications`.`problem_id`, `Clarifications`.`contest_id`, `Clarifications`.`public` from Clarifications";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class ClarificationsDAOBase extends DAO
 			return self::search(new Clarifications($Clarifications));
 		}
 
-		$sql = "SELECT `clarification_id`, `author_id`, `message`, `answer`, UNIX_TIMESTAMP(time) AS `time`, `problem_id`, `contest_id`, `public` from Clarifications WHERE (";
+		$sql = "SELECT `Clarifications`.`clarification_id`, `Clarifications`.`author_id`, `Clarifications`.`message`, `Clarifications`.`answer`, UNIX_TIMESTAMP(`Clarifications`.`time`) AS `time`, `Clarifications`.`problem_id`, `Clarifications`.`contest_id`, `Clarifications`.`public` from Clarifications WHERE (";
 		$val = array();
 		if (!is_null( $Clarifications->clarification_id)) {
 			$sql .= " `clarification_id` = ? AND";

@@ -19,6 +19,11 @@
 abstract class ProblemViewedDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Problem_Viewed`.`problem_id`, `Problem_Viewed`.`user_id`, UNIX_TIMESTAMP(`Problem_Viewed`.`view_time`) AS `view_time`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link ProblemViewed} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class ProblemViewedDAOBase extends DAO
 	public static final function getByPK(  $problem_id, $user_id )
 	{
 		if(  is_null( $problem_id ) || is_null( $user_id )  ){ return NULL; }
-		$sql = "SELECT `problem_id`, `user_id`, UNIX_TIMESTAMP(view_time) AS `view_time` FROM Problem_Viewed WHERE (problem_id = ? AND user_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Problem_Viewed`.`problem_id`, `Problem_Viewed`.`user_id`, UNIX_TIMESTAMP(`Problem_Viewed`.`view_time`) AS `view_time` FROM Problem_Viewed WHERE (problem_id = ? AND user_id = ? ) LIMIT 1;";
 		$params = array(  $problem_id, $user_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class ProblemViewedDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `problem_id`, `user_id`, UNIX_TIMESTAMP(view_time) AS `view_time` from Problem_Viewed";
+		$sql = "SELECT `Problem_Viewed`.`problem_id`, `Problem_Viewed`.`user_id`, UNIX_TIMESTAMP(`Problem_Viewed`.`view_time`) AS `view_time` from Problem_Viewed";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class ProblemViewedDAOBase extends DAO
 			return self::search(new ProblemViewed($Problem_Viewed));
 		}
 
-		$sql = "SELECT `problem_id`, `user_id`, UNIX_TIMESTAMP(view_time) AS `view_time` from Problem_Viewed WHERE (";
+		$sql = "SELECT `Problem_Viewed`.`problem_id`, `Problem_Viewed`.`user_id`, UNIX_TIMESTAMP(`Problem_Viewed`.`view_time`) AS `view_time` from Problem_Viewed WHERE (";
 		$val = array();
 		if (!is_null( $Problem_Viewed->problem_id)) {
 			$sql .= " `problem_id` = ? AND";

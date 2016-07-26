@@ -19,6 +19,11 @@
 abstract class ContestsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Contests`.`contest_id`, `Contests`.`title`, `Contests`.`description`, UNIX_TIMESTAMP(`Contests`.`start_time`) AS `start_time`, UNIX_TIMESTAMP(`Contests`.`finish_time`) AS `finish_time`, `Contests`.`window_length`, `Contests`.`director_id`, `Contests`.`rerun_id`, `Contests`.`public`, `Contests`.`alias`, `Contests`.`scoreboard`, `Contests`.`points_decay_factor`, `Contests`.`partial_score`, `Contests`.`submissions_gap`, `Contests`.`feedback`, `Contests`.`penalty`, `Contests`.`penalty_type`, `Contests`.`penalty_calc_policy`, `Contests`.`show_scoreboard_after`, `Contests`.`scoreboard_url`, `Contests`.`scoreboard_url_admin`, `Contests`.`urgent`, `Contests`.`contestant_must_register`, `Contests`.`languages`, `Contests`.`recommended`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Contests} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class ContestsDAOBase extends DAO
 	public static final function getByPK(  $contest_id )
 	{
 		if(  is_null( $contest_id )  ){ return NULL; }
-		$sql = "SELECT `contest_id`, `title`, `description`, UNIX_TIMESTAMP(start_time) AS `start_time`, UNIX_TIMESTAMP(finish_time) AS `finish_time`, `window_length`, `director_id`, `rerun_id`, `public`, `alias`, `scoreboard`, `points_decay_factor`, `partial_score`, `submissions_gap`, `feedback`, `penalty`, `penalty_type`, `penalty_calc_policy`, `show_scoreboard_after`, `scoreboard_url`, `scoreboard_url_admin`, `urgent`, `contestant_must_register`, `languages`, `recommended` FROM Contests WHERE (contest_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Contests`.`contest_id`, `Contests`.`title`, `Contests`.`description`, UNIX_TIMESTAMP(`Contests`.`start_time`) AS `start_time`, UNIX_TIMESTAMP(`Contests`.`finish_time`) AS `finish_time`, `Contests`.`window_length`, `Contests`.`director_id`, `Contests`.`rerun_id`, `Contests`.`public`, `Contests`.`alias`, `Contests`.`scoreboard`, `Contests`.`points_decay_factor`, `Contests`.`partial_score`, `Contests`.`submissions_gap`, `Contests`.`feedback`, `Contests`.`penalty`, `Contests`.`penalty_type`, `Contests`.`penalty_calc_policy`, `Contests`.`show_scoreboard_after`, `Contests`.`scoreboard_url`, `Contests`.`scoreboard_url_admin`, `Contests`.`urgent`, `Contests`.`contestant_must_register`, `Contests`.`languages`, `Contests`.`recommended` FROM Contests WHERE (contest_id = ? ) LIMIT 1;";
 		$params = array(  $contest_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class ContestsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `contest_id`, `title`, `description`, UNIX_TIMESTAMP(start_time) AS `start_time`, UNIX_TIMESTAMP(finish_time) AS `finish_time`, `window_length`, `director_id`, `rerun_id`, `public`, `alias`, `scoreboard`, `points_decay_factor`, `partial_score`, `submissions_gap`, `feedback`, `penalty`, `penalty_type`, `penalty_calc_policy`, `show_scoreboard_after`, `scoreboard_url`, `scoreboard_url_admin`, `urgent`, `contestant_must_register`, `languages`, `recommended` from Contests";
+		$sql = "SELECT `Contests`.`contest_id`, `Contests`.`title`, `Contests`.`description`, UNIX_TIMESTAMP(`Contests`.`start_time`) AS `start_time`, UNIX_TIMESTAMP(`Contests`.`finish_time`) AS `finish_time`, `Contests`.`window_length`, `Contests`.`director_id`, `Contests`.`rerun_id`, `Contests`.`public`, `Contests`.`alias`, `Contests`.`scoreboard`, `Contests`.`points_decay_factor`, `Contests`.`partial_score`, `Contests`.`submissions_gap`, `Contests`.`feedback`, `Contests`.`penalty`, `Contests`.`penalty_type`, `Contests`.`penalty_calc_policy`, `Contests`.`show_scoreboard_after`, `Contests`.`scoreboard_url`, `Contests`.`scoreboard_url_admin`, `Contests`.`urgent`, `Contests`.`contestant_must_register`, `Contests`.`languages`, `Contests`.`recommended` from Contests";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class ContestsDAOBase extends DAO
 			return self::search(new Contests($Contests));
 		}
 
-		$sql = "SELECT `contest_id`, `title`, `description`, UNIX_TIMESTAMP(start_time) AS `start_time`, UNIX_TIMESTAMP(finish_time) AS `finish_time`, `window_length`, `director_id`, `rerun_id`, `public`, `alias`, `scoreboard`, `points_decay_factor`, `partial_score`, `submissions_gap`, `feedback`, `penalty`, `penalty_type`, `penalty_calc_policy`, `show_scoreboard_after`, `scoreboard_url`, `scoreboard_url_admin`, `urgent`, `contestant_must_register`, `languages`, `recommended` from Contests WHERE (";
+		$sql = "SELECT `Contests`.`contest_id`, `Contests`.`title`, `Contests`.`description`, UNIX_TIMESTAMP(`Contests`.`start_time`) AS `start_time`, UNIX_TIMESTAMP(`Contests`.`finish_time`) AS `finish_time`, `Contests`.`window_length`, `Contests`.`director_id`, `Contests`.`rerun_id`, `Contests`.`public`, `Contests`.`alias`, `Contests`.`scoreboard`, `Contests`.`points_decay_factor`, `Contests`.`partial_score`, `Contests`.`submissions_gap`, `Contests`.`feedback`, `Contests`.`penalty`, `Contests`.`penalty_type`, `Contests`.`penalty_calc_policy`, `Contests`.`show_scoreboard_after`, `Contests`.`scoreboard_url`, `Contests`.`scoreboard_url_admin`, `Contests`.`urgent`, `Contests`.`contestant_must_register`, `Contests`.`languages`, `Contests`.`recommended` from Contests WHERE (";
 		$val = array();
 		if (!is_null( $Contests->contest_id)) {
 			$sql .= " `contest_id` = ? AND";

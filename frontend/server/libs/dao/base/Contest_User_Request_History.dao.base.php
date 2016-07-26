@@ -19,6 +19,11 @@
 abstract class ContestUserRequestHistoryDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Contest_User_Request_History`.`history_id`, `Contest_User_Request_History`.`user_id`, `Contest_User_Request_History`.`contest_id`, UNIX_TIMESTAMP(`Contest_User_Request_History`.`time`) AS `time`, `Contest_User_Request_History`.`accepted`, `Contest_User_Request_History`.`admin_id`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link ContestUserRequestHistory} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class ContestUserRequestHistoryDAOBase extends DAO
 	public static final function getByPK(  $history_id )
 	{
 		if(  is_null( $history_id )  ){ return NULL; }
-		$sql = "SELECT `history_id`, `user_id`, `contest_id`, UNIX_TIMESTAMP(time) AS `time`, `accepted`, `admin_id` FROM Contest_User_Request_History WHERE (history_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Contest_User_Request_History`.`history_id`, `Contest_User_Request_History`.`user_id`, `Contest_User_Request_History`.`contest_id`, UNIX_TIMESTAMP(`Contest_User_Request_History`.`time`) AS `time`, `Contest_User_Request_History`.`accepted`, `Contest_User_Request_History`.`admin_id` FROM Contest_User_Request_History WHERE (history_id = ? ) LIMIT 1;";
 		$params = array(  $history_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class ContestUserRequestHistoryDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `history_id`, `user_id`, `contest_id`, UNIX_TIMESTAMP(time) AS `time`, `accepted`, `admin_id` from Contest_User_Request_History";
+		$sql = "SELECT `Contest_User_Request_History`.`history_id`, `Contest_User_Request_History`.`user_id`, `Contest_User_Request_History`.`contest_id`, UNIX_TIMESTAMP(`Contest_User_Request_History`.`time`) AS `time`, `Contest_User_Request_History`.`accepted`, `Contest_User_Request_History`.`admin_id` from Contest_User_Request_History";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class ContestUserRequestHistoryDAOBase extends DAO
 			return self::search(new ContestUserRequestHistory($Contest_User_Request_History));
 		}
 
-		$sql = "SELECT `history_id`, `user_id`, `contest_id`, UNIX_TIMESTAMP(time) AS `time`, `accepted`, `admin_id` from Contest_User_Request_History WHERE (";
+		$sql = "SELECT `Contest_User_Request_History`.`history_id`, `Contest_User_Request_History`.`user_id`, `Contest_User_Request_History`.`contest_id`, UNIX_TIMESTAMP(`Contest_User_Request_History`.`time`) AS `time`, `Contest_User_Request_History`.`accepted`, `Contest_User_Request_History`.`admin_id` from Contest_User_Request_History WHERE (";
 		$val = array();
 		if (!is_null( $Contest_User_Request_History->history_id)) {
 			$sql .= " `history_id` = ? AND";

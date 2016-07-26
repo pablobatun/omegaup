@@ -19,6 +19,11 @@
 abstract class UsersPermissionsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Users_Permissions`.`user_id`, `Users_Permissions`.`permission_id`, `Users_Permissions`.`contest_id`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link UsersPermissions} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class UsersPermissionsDAOBase extends DAO
 	public static final function getByPK(  $user_id, $permission_id )
 	{
 		if(  is_null( $user_id ) || is_null( $permission_id )  ){ return NULL; }
-		$sql = "SELECT `user_id`, `permission_id`, `contest_id` FROM Users_Permissions WHERE (user_id = ? AND permission_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Users_Permissions`.`user_id`, `Users_Permissions`.`permission_id`, `Users_Permissions`.`contest_id` FROM Users_Permissions WHERE (user_id = ? AND permission_id = ? ) LIMIT 1;";
 		$params = array(  $user_id, $permission_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class UsersPermissionsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `user_id`, `permission_id`, `contest_id` from Users_Permissions";
+		$sql = "SELECT `Users_Permissions`.`user_id`, `Users_Permissions`.`permission_id`, `Users_Permissions`.`contest_id` from Users_Permissions";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class UsersPermissionsDAOBase extends DAO
 			return self::search(new UsersPermissions($Users_Permissions));
 		}
 
-		$sql = "SELECT `user_id`, `permission_id`, `contest_id` from Users_Permissions WHERE (";
+		$sql = "SELECT `Users_Permissions`.`user_id`, `Users_Permissions`.`permission_id`, `Users_Permissions`.`contest_id` from Users_Permissions WHERE (";
 		$val = array();
 		if (!is_null( $Users_Permissions->user_id)) {
 			$sql .= " `user_id` = ? AND";

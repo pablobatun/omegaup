@@ -19,6 +19,11 @@
 abstract class PermissionsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Permissions`.`permission_id`, `Permissions`.`name`, `Permissions`.`description`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Permissions} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class PermissionsDAOBase extends DAO
 	public static final function getByPK(  $permission_id )
 	{
 		if(  is_null( $permission_id )  ){ return NULL; }
-		$sql = "SELECT `permission_id`, `name`, `description` FROM Permissions WHERE (permission_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Permissions`.`permission_id`, `Permissions`.`name`, `Permissions`.`description` FROM Permissions WHERE (permission_id = ? ) LIMIT 1;";
 		$params = array(  $permission_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class PermissionsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `permission_id`, `name`, `description` from Permissions";
+		$sql = "SELECT `Permissions`.`permission_id`, `Permissions`.`name`, `Permissions`.`description` from Permissions";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class PermissionsDAOBase extends DAO
 			return self::search(new Permissions($Permissions));
 		}
 
-		$sql = "SELECT `permission_id`, `name`, `description` from Permissions WHERE (";
+		$sql = "SELECT `Permissions`.`permission_id`, `Permissions`.`name`, `Permissions`.`description` from Permissions WHERE (";
 		$val = array();
 		if (!is_null( $Permissions->permission_id)) {
 			$sql .= " `permission_id` = ? AND";

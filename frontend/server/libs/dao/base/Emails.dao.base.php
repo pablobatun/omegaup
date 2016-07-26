@@ -19,6 +19,11 @@
 abstract class EmailsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Emails`.`email_id`, `Emails`.`email`, `Emails`.`user_id`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Emails} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class EmailsDAOBase extends DAO
 	public static final function getByPK(  $email_id )
 	{
 		if(  is_null( $email_id )  ){ return NULL; }
-		$sql = "SELECT `email_id`, `email`, `user_id` FROM Emails WHERE (email_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Emails`.`email_id`, `Emails`.`email`, `Emails`.`user_id` FROM Emails WHERE (email_id = ? ) LIMIT 1;";
 		$params = array(  $email_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class EmailsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `email_id`, `email`, `user_id` from Emails";
+		$sql = "SELECT `Emails`.`email_id`, `Emails`.`email`, `Emails`.`user_id` from Emails";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class EmailsDAOBase extends DAO
 			return self::search(new Emails($Emails));
 		}
 
-		$sql = "SELECT `email_id`, `email`, `user_id` from Emails WHERE (";
+		$sql = "SELECT `Emails`.`email_id`, `Emails`.`email`, `Emails`.`user_id` from Emails WHERE (";
 		$val = array();
 		if (!is_null( $Emails->email_id)) {
 			$sql .= " `email_id` = ? AND";

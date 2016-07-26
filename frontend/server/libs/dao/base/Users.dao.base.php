@@ -19,6 +19,11 @@
 abstract class UsersDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Users`.`user_id`, `Users`.`username`, `Users`.`facebook_user_id`, `Users`.`password`, `Users`.`main_email_id`, `Users`.`name`, `Users`.`solved`, `Users`.`submissions`, `Users`.`country_id`, `Users`.`state_id`, `Users`.`school_id`, `Users`.`scholar_degree`, `Users`.`language_id`, UNIX_TIMESTAMP(`Users`.`graduation_date`) AS `graduation_date`, UNIX_TIMESTAMP(`Users`.`birth_date`) AS `birth_date`, UNIX_TIMESTAMP(`Users`.`last_access`) AS `last_access`, `Users`.`verified`, `Users`.`verification_id`, `Users`.`reset_digest`, UNIX_TIMESTAMP(`Users`.`reset_sent_at`) AS `reset_sent_at`, `Users`.`recruitment_optin`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Users} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class UsersDAOBase extends DAO
 	public static final function getByPK(  $user_id )
 	{
 		if(  is_null( $user_id )  ){ return NULL; }
-		$sql = "SELECT `user_id`, `username`, `facebook_user_id`, `password`, `main_email_id`, `name`, `solved`, `submissions`, `country_id`, `state_id`, `school_id`, `scholar_degree`, `language_id`, UNIX_TIMESTAMP(graduation_date) AS `graduation_date`, UNIX_TIMESTAMP(birth_date) AS `birth_date`, UNIX_TIMESTAMP(last_access) AS `last_access`, `verified`, `verification_id`, `reset_digest`, UNIX_TIMESTAMP(reset_sent_at) AS `reset_sent_at`, `recruitment_optin` FROM Users WHERE (user_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Users`.`user_id`, `Users`.`username`, `Users`.`facebook_user_id`, `Users`.`password`, `Users`.`main_email_id`, `Users`.`name`, `Users`.`solved`, `Users`.`submissions`, `Users`.`country_id`, `Users`.`state_id`, `Users`.`school_id`, `Users`.`scholar_degree`, `Users`.`language_id`, UNIX_TIMESTAMP(`Users`.`graduation_date`) AS `graduation_date`, UNIX_TIMESTAMP(`Users`.`birth_date`) AS `birth_date`, UNIX_TIMESTAMP(`Users`.`last_access`) AS `last_access`, `Users`.`verified`, `Users`.`verification_id`, `Users`.`reset_digest`, UNIX_TIMESTAMP(`Users`.`reset_sent_at`) AS `reset_sent_at`, `Users`.`recruitment_optin` FROM Users WHERE (user_id = ? ) LIMIT 1;";
 		$params = array(  $user_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class UsersDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `user_id`, `username`, `facebook_user_id`, `password`, `main_email_id`, `name`, `solved`, `submissions`, `country_id`, `state_id`, `school_id`, `scholar_degree`, `language_id`, UNIX_TIMESTAMP(graduation_date) AS `graduation_date`, UNIX_TIMESTAMP(birth_date) AS `birth_date`, UNIX_TIMESTAMP(last_access) AS `last_access`, `verified`, `verification_id`, `reset_digest`, UNIX_TIMESTAMP(reset_sent_at) AS `reset_sent_at`, `recruitment_optin` from Users";
+		$sql = "SELECT `Users`.`user_id`, `Users`.`username`, `Users`.`facebook_user_id`, `Users`.`password`, `Users`.`main_email_id`, `Users`.`name`, `Users`.`solved`, `Users`.`submissions`, `Users`.`country_id`, `Users`.`state_id`, `Users`.`school_id`, `Users`.`scholar_degree`, `Users`.`language_id`, UNIX_TIMESTAMP(`Users`.`graduation_date`) AS `graduation_date`, UNIX_TIMESTAMP(`Users`.`birth_date`) AS `birth_date`, UNIX_TIMESTAMP(`Users`.`last_access`) AS `last_access`, `Users`.`verified`, `Users`.`verification_id`, `Users`.`reset_digest`, UNIX_TIMESTAMP(`Users`.`reset_sent_at`) AS `reset_sent_at`, `Users`.`recruitment_optin` from Users";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class UsersDAOBase extends DAO
 			return self::search(new Users($Users));
 		}
 
-		$sql = "SELECT `user_id`, `username`, `facebook_user_id`, `password`, `main_email_id`, `name`, `solved`, `submissions`, `country_id`, `state_id`, `school_id`, `scholar_degree`, `language_id`, UNIX_TIMESTAMP(graduation_date) AS `graduation_date`, UNIX_TIMESTAMP(birth_date) AS `birth_date`, UNIX_TIMESTAMP(last_access) AS `last_access`, `verified`, `verification_id`, `reset_digest`, UNIX_TIMESTAMP(reset_sent_at) AS `reset_sent_at`, `recruitment_optin` from Users WHERE (";
+		$sql = "SELECT `Users`.`user_id`, `Users`.`username`, `Users`.`facebook_user_id`, `Users`.`password`, `Users`.`main_email_id`, `Users`.`name`, `Users`.`solved`, `Users`.`submissions`, `Users`.`country_id`, `Users`.`state_id`, `Users`.`school_id`, `Users`.`scholar_degree`, `Users`.`language_id`, UNIX_TIMESTAMP(`Users`.`graduation_date`) AS `graduation_date`, UNIX_TIMESTAMP(`Users`.`birth_date`) AS `birth_date`, UNIX_TIMESTAMP(`Users`.`last_access`) AS `last_access`, `Users`.`verified`, `Users`.`verification_id`, `Users`.`reset_digest`, UNIX_TIMESTAMP(`Users`.`reset_sent_at`) AS `reset_sent_at`, `Users`.`recruitment_optin` from Users WHERE (";
 		$val = array();
 		if (!is_null( $Users->user_id)) {
 			$sql .= " `user_id` = ? AND";

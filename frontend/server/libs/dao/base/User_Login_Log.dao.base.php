@@ -19,6 +19,11 @@
 abstract class UserLoginLogDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`User_Login_Log`.`user_id`, `User_Login_Log`.`ip`, UNIX_TIMESTAMP(`User_Login_Log`.`time`) AS `time`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link UserLoginLog} pasado en la base de datos.
@@ -51,7 +56,7 @@ abstract class UserLoginLogDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `user_id`, `ip`, UNIX_TIMESTAMP(time) AS `time` from User_Login_Log";
+		$sql = "SELECT `User_Login_Log`.`user_id`, `User_Login_Log`.`ip`, UNIX_TIMESTAMP(`User_Login_Log`.`time`) AS `time` from User_Login_Log";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -98,7 +103,7 @@ abstract class UserLoginLogDAOBase extends DAO
 			return self::search(new UserLoginLog($User_Login_Log));
 		}
 
-		$sql = "SELECT `user_id`, `ip`, UNIX_TIMESTAMP(time) AS `time` from User_Login_Log WHERE (";
+		$sql = "SELECT `User_Login_Log`.`user_id`, `User_Login_Log`.`ip`, UNIX_TIMESTAMP(`User_Login_Log`.`time`) AS `time` from User_Login_Log WHERE (";
 		$val = array();
 		if (!is_null( $User_Login_Log->user_id)) {
 			$sql .= " `user_id` = ? AND";

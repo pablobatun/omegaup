@@ -19,6 +19,11 @@
 abstract class GroupsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Groups`.`group_id`, `Groups`.`owner_id`, UNIX_TIMESTAMP(`Groups`.`create_time`) AS `create_time`, `Groups`.`alias`, `Groups`.`name`, `Groups`.`description`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Groups} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class GroupsDAOBase extends DAO
 	public static final function getByPK(  $group_id )
 	{
 		if(  is_null( $group_id )  ){ return NULL; }
-		$sql = "SELECT `group_id`, `owner_id`, UNIX_TIMESTAMP(create_time) AS `create_time`, `alias`, `name`, `description` FROM Groups WHERE (group_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Groups`.`group_id`, `Groups`.`owner_id`, UNIX_TIMESTAMP(`Groups`.`create_time`) AS `create_time`, `Groups`.`alias`, `Groups`.`name`, `Groups`.`description` FROM Groups WHERE (group_id = ? ) LIMIT 1;";
 		$params = array(  $group_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class GroupsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `group_id`, `owner_id`, UNIX_TIMESTAMP(create_time) AS `create_time`, `alias`, `name`, `description` from Groups";
+		$sql = "SELECT `Groups`.`group_id`, `Groups`.`owner_id`, UNIX_TIMESTAMP(`Groups`.`create_time`) AS `create_time`, `Groups`.`alias`, `Groups`.`name`, `Groups`.`description` from Groups";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class GroupsDAOBase extends DAO
 			return self::search(new Groups($Groups));
 		}
 
-		$sql = "SELECT `group_id`, `owner_id`, UNIX_TIMESTAMP(create_time) AS `create_time`, `alias`, `name`, `description` from Groups WHERE (";
+		$sql = "SELECT `Groups`.`group_id`, `Groups`.`owner_id`, UNIX_TIMESTAMP(`Groups`.`create_time`) AS `create_time`, `Groups`.`alias`, `Groups`.`name`, `Groups`.`description` from Groups WHERE (";
 		$val = array();
 		if (!is_null( $Groups->group_id)) {
 			$sql .= " `group_id` = ? AND";

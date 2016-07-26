@@ -19,6 +19,11 @@
 abstract class ContestsUsersDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Contests_Users`.`user_id`, `Contests_Users`.`contest_id`, UNIX_TIMESTAMP(`Contests_Users`.`access_time`) AS `access_time`, `Contests_Users`.`score`, `Contests_Users`.`time`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link ContestsUsers} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class ContestsUsersDAOBase extends DAO
 	public static final function getByPK(  $user_id, $contest_id )
 	{
 		if(  is_null( $user_id ) || is_null( $contest_id )  ){ return NULL; }
-		$sql = "SELECT `user_id`, `contest_id`, UNIX_TIMESTAMP(access_time) AS `access_time`, `score`, `time` FROM Contests_Users WHERE (user_id = ? AND contest_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Contests_Users`.`user_id`, `Contests_Users`.`contest_id`, UNIX_TIMESTAMP(`Contests_Users`.`access_time`) AS `access_time`, `Contests_Users`.`score`, `Contests_Users`.`time` FROM Contests_Users WHERE (user_id = ? AND contest_id = ? ) LIMIT 1;";
 		$params = array(  $user_id, $contest_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class ContestsUsersDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `user_id`, `contest_id`, UNIX_TIMESTAMP(access_time) AS `access_time`, `score`, `time` from Contests_Users";
+		$sql = "SELECT `Contests_Users`.`user_id`, `Contests_Users`.`contest_id`, UNIX_TIMESTAMP(`Contests_Users`.`access_time`) AS `access_time`, `Contests_Users`.`score`, `Contests_Users`.`time` from Contests_Users";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class ContestsUsersDAOBase extends DAO
 			return self::search(new ContestsUsers($Contests_Users));
 		}
 
-		$sql = "SELECT `user_id`, `contest_id`, UNIX_TIMESTAMP(access_time) AS `access_time`, `score`, `time` from Contests_Users WHERE (";
+		$sql = "SELECT `Contests_Users`.`user_id`, `Contests_Users`.`contest_id`, UNIX_TIMESTAMP(`Contests_Users`.`access_time`) AS `access_time`, `Contests_Users`.`score`, `Contests_Users`.`time` from Contests_Users WHERE (";
 		$val = array();
 		if (!is_null( $Contests_Users->user_id)) {
 			$sql .= " `user_id` = ? AND";

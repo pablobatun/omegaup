@@ -19,6 +19,11 @@
 abstract class ContestAccessLogDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Contest_Access_Log`.`contest_id`, `Contest_Access_Log`.`user_id`, `Contest_Access_Log`.`ip`, UNIX_TIMESTAMP(`Contest_Access_Log`.`time`) AS `time`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link ContestAccessLog} pasado en la base de datos.
@@ -51,7 +56,7 @@ abstract class ContestAccessLogDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `contest_id`, `user_id`, `ip`, UNIX_TIMESTAMP(time) AS `time` from Contest_Access_Log";
+		$sql = "SELECT `Contest_Access_Log`.`contest_id`, `Contest_Access_Log`.`user_id`, `Contest_Access_Log`.`ip`, UNIX_TIMESTAMP(`Contest_Access_Log`.`time`) AS `time` from Contest_Access_Log";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -98,7 +103,7 @@ abstract class ContestAccessLogDAOBase extends DAO
 			return self::search(new ContestAccessLog($Contest_Access_Log));
 		}
 
-		$sql = "SELECT `contest_id`, `user_id`, `ip`, UNIX_TIMESTAMP(time) AS `time` from Contest_Access_Log WHERE (";
+		$sql = "SELECT `Contest_Access_Log`.`contest_id`, `Contest_Access_Log`.`user_id`, `Contest_Access_Log`.`ip`, UNIX_TIMESTAMP(`Contest_Access_Log`.`time`) AS `time` from Contest_Access_Log WHERE (";
 		$val = array();
 		if (!is_null( $Contest_Access_Log->contest_id)) {
 			$sql .= " `contest_id` = ? AND";

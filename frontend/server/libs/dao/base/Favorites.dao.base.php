@@ -19,6 +19,11 @@
 abstract class FavoritesDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Favorites`.`user_id`, `Favorites`.`problem_id`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Favorites} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class FavoritesDAOBase extends DAO
 	public static final function getByPK(  $user_id, $problem_id )
 	{
 		if(  is_null( $user_id ) || is_null( $problem_id )  ){ return NULL; }
-		$sql = "SELECT `user_id`, `problem_id` FROM Favorites WHERE (user_id = ? AND problem_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Favorites`.`user_id`, `Favorites`.`problem_id` FROM Favorites WHERE (user_id = ? AND problem_id = ? ) LIMIT 1;";
 		$params = array(  $user_id, $problem_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class FavoritesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `user_id`, `problem_id` from Favorites";
+		$sql = "SELECT `Favorites`.`user_id`, `Favorites`.`problem_id` from Favorites";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class FavoritesDAOBase extends DAO
 			return self::search(new Favorites($Favorites));
 		}
 
-		$sql = "SELECT `user_id`, `problem_id` from Favorites WHERE (";
+		$sql = "SELECT `Favorites`.`user_id`, `Favorites`.`problem_id` from Favorites WHERE (";
 		$val = array();
 		if (!is_null( $Favorites->user_id)) {
 			$sql .= " `user_id` = ? AND";

@@ -19,6 +19,11 @@
 abstract class ContestUserRequestDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Contest_User_Request`.`user_id`, `Contest_User_Request`.`contest_id`, UNIX_TIMESTAMP(`Contest_User_Request`.`request_time`) AS `request_time`, UNIX_TIMESTAMP(`Contest_User_Request`.`last_update`) AS `last_update`, `Contest_User_Request`.`accepted`, `Contest_User_Request`.`extra_note`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link ContestUserRequest} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class ContestUserRequestDAOBase extends DAO
 	public static final function getByPK(  $user_id, $contest_id )
 	{
 		if(  is_null( $user_id ) || is_null( $contest_id )  ){ return NULL; }
-		$sql = "SELECT `user_id`, `contest_id`, UNIX_TIMESTAMP(request_time) AS `request_time`, UNIX_TIMESTAMP(last_update) AS `last_update`, `accepted`, `extra_note` FROM Contest_User_Request WHERE (user_id = ? AND contest_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Contest_User_Request`.`user_id`, `Contest_User_Request`.`contest_id`, UNIX_TIMESTAMP(`Contest_User_Request`.`request_time`) AS `request_time`, UNIX_TIMESTAMP(`Contest_User_Request`.`last_update`) AS `last_update`, `Contest_User_Request`.`accepted`, `Contest_User_Request`.`extra_note` FROM Contest_User_Request WHERE (user_id = ? AND contest_id = ? ) LIMIT 1;";
 		$params = array(  $user_id, $contest_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class ContestUserRequestDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `user_id`, `contest_id`, UNIX_TIMESTAMP(request_time) AS `request_time`, UNIX_TIMESTAMP(last_update) AS `last_update`, `accepted`, `extra_note` from Contest_User_Request";
+		$sql = "SELECT `Contest_User_Request`.`user_id`, `Contest_User_Request`.`contest_id`, UNIX_TIMESTAMP(`Contest_User_Request`.`request_time`) AS `request_time`, UNIX_TIMESTAMP(`Contest_User_Request`.`last_update`) AS `last_update`, `Contest_User_Request`.`accepted`, `Contest_User_Request`.`extra_note` from Contest_User_Request";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class ContestUserRequestDAOBase extends DAO
 			return self::search(new ContestUserRequest($Contest_User_Request));
 		}
 
-		$sql = "SELECT `user_id`, `contest_id`, UNIX_TIMESTAMP(request_time) AS `request_time`, UNIX_TIMESTAMP(last_update) AS `last_update`, `accepted`, `extra_note` from Contest_User_Request WHERE (";
+		$sql = "SELECT `Contest_User_Request`.`user_id`, `Contest_User_Request`.`contest_id`, UNIX_TIMESTAMP(`Contest_User_Request`.`request_time`) AS `request_time`, UNIX_TIMESTAMP(`Contest_User_Request`.`last_update`) AS `last_update`, `Contest_User_Request`.`accepted`, `Contest_User_Request`.`extra_note` from Contest_User_Request WHERE (";
 		$val = array();
 		if (!is_null( $Contest_User_Request->user_id)) {
 			$sql .= " `user_id` = ? AND";

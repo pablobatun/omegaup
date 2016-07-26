@@ -19,6 +19,11 @@
 abstract class MessagesDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Messages`.`message_id`, `Messages`.`read`, `Messages`.`sender_id`, `Messages`.`recipient_id`, `Messages`.`message`, UNIX_TIMESTAMP(`Messages`.`date`) AS `date`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link Messages} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class MessagesDAOBase extends DAO
 	public static final function getByPK(  $message_id )
 	{
 		if(  is_null( $message_id )  ){ return NULL; }
-		$sql = "SELECT `message_id`, `read`, `sender_id`, `recipient_id`, `message`, UNIX_TIMESTAMP(date) AS `date` FROM Messages WHERE (message_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Messages`.`message_id`, `Messages`.`read`, `Messages`.`sender_id`, `Messages`.`recipient_id`, `Messages`.`message`, UNIX_TIMESTAMP(`Messages`.`date`) AS `date` FROM Messages WHERE (message_id = ? ) LIMIT 1;";
 		$params = array(  $message_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class MessagesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `message_id`, `read`, `sender_id`, `recipient_id`, `message`, UNIX_TIMESTAMP(date) AS `date` from Messages";
+		$sql = "SELECT `Messages`.`message_id`, `Messages`.`read`, `Messages`.`sender_id`, `Messages`.`recipient_id`, `Messages`.`message`, UNIX_TIMESTAMP(`Messages`.`date`) AS `date` from Messages";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class MessagesDAOBase extends DAO
 			return self::search(new Messages($Messages));
 		}
 
-		$sql = "SELECT `message_id`, `read`, `sender_id`, `recipient_id`, `message`, UNIX_TIMESTAMP(date) AS `date` from Messages WHERE (";
+		$sql = "SELECT `Messages`.`message_id`, `Messages`.`read`, `Messages`.`sender_id`, `Messages`.`recipient_id`, `Messages`.`message`, UNIX_TIMESTAMP(`Messages`.`date`) AS `date` from Messages WHERE (";
 		$val = array();
 		if (!is_null( $Messages->message_id)) {
 			$sql .= " `message_id` = ? AND";

@@ -19,6 +19,11 @@
 abstract class GroupsScoreboardsDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Groups_Scoreboards`.`group_scoreboard_id`, `Groups_Scoreboards`.`group_id`, UNIX_TIMESTAMP(`Groups_Scoreboards`.`create_time`) AS `create_time`, `Groups_Scoreboards`.`alias`, `Groups_Scoreboards`.`name`, `Groups_Scoreboards`.`description`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link GroupsScoreboards} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class GroupsScoreboardsDAOBase extends DAO
 	public static final function getByPK(  $group_scoreboard_id )
 	{
 		if(  is_null( $group_scoreboard_id )  ){ return NULL; }
-		$sql = "SELECT `group_scoreboard_id`, `group_id`, UNIX_TIMESTAMP(create_time) AS `create_time`, `alias`, `name`, `description` FROM Groups_Scoreboards WHERE (group_scoreboard_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Groups_Scoreboards`.`group_scoreboard_id`, `Groups_Scoreboards`.`group_id`, UNIX_TIMESTAMP(`Groups_Scoreboards`.`create_time`) AS `create_time`, `Groups_Scoreboards`.`alias`, `Groups_Scoreboards`.`name`, `Groups_Scoreboards`.`description` FROM Groups_Scoreboards WHERE (group_scoreboard_id = ? ) LIMIT 1;";
 		$params = array(  $group_scoreboard_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class GroupsScoreboardsDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `group_scoreboard_id`, `group_id`, UNIX_TIMESTAMP(create_time) AS `create_time`, `alias`, `name`, `description` from Groups_Scoreboards";
+		$sql = "SELECT `Groups_Scoreboards`.`group_scoreboard_id`, `Groups_Scoreboards`.`group_id`, UNIX_TIMESTAMP(`Groups_Scoreboards`.`create_time`) AS `create_time`, `Groups_Scoreboards`.`alias`, `Groups_Scoreboards`.`name`, `Groups_Scoreboards`.`description` from Groups_Scoreboards";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class GroupsScoreboardsDAOBase extends DAO
 			return self::search(new GroupsScoreboards($Groups_Scoreboards));
 		}
 
-		$sql = "SELECT `group_scoreboard_id`, `group_id`, UNIX_TIMESTAMP(create_time) AS `create_time`, `alias`, `name`, `description` from Groups_Scoreboards WHERE (";
+		$sql = "SELECT `Groups_Scoreboards`.`group_scoreboard_id`, `Groups_Scoreboards`.`group_id`, UNIX_TIMESTAMP(`Groups_Scoreboards`.`create_time`) AS `create_time`, `Groups_Scoreboards`.`alias`, `Groups_Scoreboards`.`name`, `Groups_Scoreboards`.`description` from Groups_Scoreboards WHERE (";
 		$val = array();
 		if (!is_null( $Groups_Scoreboards->group_scoreboard_id)) {
 			$sql .= " `group_scoreboard_id` = ? AND";

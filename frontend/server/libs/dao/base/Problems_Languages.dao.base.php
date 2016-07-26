@@ -19,6 +19,11 @@
 abstract class ProblemsLanguagesDAOBase extends DAO
 {
 	/**
+	  *	Campos de la tabla.
+	  **/
+	const FIELDS = '`Problems_Languages`.`problem_id`, `Problems_Languages`.`language_id`, `Problems_Languages`.`translator_id`';
+
+	/**
 	  *	Guardar registros.
 	  *
 	  *	Este metodo guarda el estado actual del objeto {@link ProblemsLanguages} pasado en la base de datos. La llave
@@ -53,7 +58,7 @@ abstract class ProblemsLanguagesDAOBase extends DAO
 	public static final function getByPK(  $problem_id, $language_id )
 	{
 		if(  is_null( $problem_id ) || is_null( $language_id )  ){ return NULL; }
-		$sql = "SELECT `problem_id`, `language_id`, `translator_id` FROM Problems_Languages WHERE (problem_id = ? AND language_id = ? ) LIMIT 1;";
+		$sql = "SELECT `Problems_Languages`.`problem_id`, `Problems_Languages`.`language_id`, `Problems_Languages`.`translator_id` FROM Problems_Languages WHERE (problem_id = ? AND language_id = ? ) LIMIT 1;";
 		$params = array(  $problem_id, $language_id );
 		global $conn;
 		$rs = $conn->GetRow($sql, $params);
@@ -79,7 +84,7 @@ abstract class ProblemsLanguagesDAOBase extends DAO
 	  **/
 	public static final function getAll( $pagina = NULL, $columnas_por_pagina = NULL, $orden = NULL, $tipo_de_orden = 'ASC' )
 	{
-		$sql = "SELECT `problem_id`, `language_id`, `translator_id` from Problems_Languages";
+		$sql = "SELECT `Problems_Languages`.`problem_id`, `Problems_Languages`.`language_id`, `Problems_Languages`.`translator_id` from Problems_Languages";
 		if( ! is_null ( $orden ) )
 		{ $sql .= " ORDER BY `" . $orden . "` " . $tipo_de_orden;	}
 		if( ! is_null ( $pagina ) )
@@ -126,7 +131,7 @@ abstract class ProblemsLanguagesDAOBase extends DAO
 			return self::search(new ProblemsLanguages($Problems_Languages));
 		}
 
-		$sql = "SELECT `problem_id`, `language_id`, `translator_id` from Problems_Languages WHERE (";
+		$sql = "SELECT `Problems_Languages`.`problem_id`, `Problems_Languages`.`language_id`, `Problems_Languages`.`translator_id` from Problems_Languages WHERE (";
 		$val = array();
 		if (!is_null( $Problems_Languages->problem_id)) {
 			$sql .= " `problem_id` = ? AND";
